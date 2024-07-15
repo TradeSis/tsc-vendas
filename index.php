@@ -9,7 +9,6 @@ if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && 
     $nivelMenuLogin = buscaLoginAplicativo($_SESSION['idLogin'], $_SESSION['nomeAplicativo']);
     $_SESSION['nivelMenu'] = $nivelMenuLogin['nivelMenu'];
 }
-echo json_encode($_SESSION);
 ?>
 <!doctype html>
 <html lang="pt-BR">
