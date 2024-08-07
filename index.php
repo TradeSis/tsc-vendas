@@ -1,11 +1,14 @@
 <?php
 include_once __DIR__ . "/../config.php";
 include_once "header.php";
-include_once ROOT . "/sistema/database/loginAplicativo.php";
 
-$nivelMenuLogin = buscaLoginAplicativo($_SESSION['idLogin'], 'Vendas');
+if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && $_SESSION['nomeAplicativo'] !== 'Vendas'){
+    $_SESSION['nomeAplicativo'] = 'Vendas';
+    include_once ROOT . "/sistema/database/loginAplicativo.php";
 
-$nivelMenu = $nivelMenuLogin['nivelMenu'];
+    $nivelMenuLogin = buscaLoginAplicativo($_SESSION['idLogin'], $_SESSION['nomeAplicativo']);
+    $_SESSION['nivelMenu'] = $nivelMenuLogin['nivelMenu'];
+}
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -38,7 +41,7 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                             $tab = $_GET['tab'];
                         }
                         ?>
-                        <?php if ($nivelMenu >= 2) {
+                        <?php if ($_SESSION['nivelMenu'] >= 2) {
                             if ($tab == '') {
                                 $tab = 'prevenda';
                             } ?>
@@ -48,37 +51,37 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                             </li>
 
                         <?php }
-                        if ($nivelMenu >= 2) { ?>
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                             <li class="nav-item mr-1">
                                 <a class="nav-link <?php if ($tab == "bonusclien") {echo " active ";} ?>"
                                 href="?tab=bonusclien" role="tab">Bonus Cliente</a>
                             </li>
                         <?php }
-                        if ($nivelMenu >= 2) { ?>
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                             <li class="nav-item mr-1">
                                 <a class="nav-link 
                                 <?php if ($tab == "desconto") {echo " active ";} ?>" 
                                 href="?tab=desconto" role="tab">Descontos</a>
                             </li>
                         <?php }
-                        if ($nivelMenu >= 2) { ?>
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                             <li class="nav-item mr-1">
                                 <a class="nav-link <?php if ($tab == "produtodisp") {echo " active ";} ?>" 
                                 href="?tab=produtodisp" role="tab">Produto Disponível</a>
                             </li>
                         <?php }
-                        if ($nivelMenu >= 2) { ?>
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                             <li class="nav-item mr-1">
                                 <a class="nav-link <?php if ($tab == "cupomcashback") {echo " active ";} ?>" 
                                 href="?tab=cupomcashback" role="tab">Cupom Cashback</a>
                             </li>
                         <?php }
-                        if ($nivelMenu >= 4) { ?>
+                        if ($_SESSION['nivelMenu'] >= 4) { ?>
                             <li class="nav-item mr-1">
                                 <a class="nav-link <?php if ($tab == "apoio") {echo " active ";} ?>" 
                                 href="?tab=apoio" role="tab" data-toggle="tooltip" data-placement="top" title="Apoio"><i class="bi bi-gear"></i> Apoio</a>
                             </li>
-                        <?php }?>
+                        <?php } ?>
                     </ul>
 
                 </div>
@@ -91,24 +94,36 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                         $getTab = '';
                     } ?>
                     <select class="form-select mt-2 ts-selectSubMenuAplicativos" id="subtabVendas">
-                    <option value="<?php echo URLROOT ?>/vendas/?tab=prevenda" 
-                    <?php if ($getTab == "prevenda") {echo " selected ";} ?>>Pré-Venda Web</option>
-                        <option value="<?php echo URLROOT ?>/vendas/?tab=desconto" 
-                        <?php if ($getTab == "desconto") {echo " selected ";} ?>>Descontos</option>
+                        <?php if ($_SESSION['nivelMenu'] >= 2) { ?>
+                        <option value="<?php echo URLROOT ?>/vendas/?tab=prevenda" 
+                        <?php if ($getTab == "prevenda") {echo " selected ";} ?>>Pré-Venda Web</option>
+                        <?php }
 
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/?tab=bonusclien" 
                         <?php if ($getTab == "bonusclien") {echo " selected ";} ?>>Bonus Cliente</option>
+                        <?php }
 
-                        
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
+                        <option value="<?php echo URLROOT ?>/vendas/?tab=desconto" 
+                        <?php if ($getTab == "desconto") {echo " selected ";} ?>>Descontos</option>
+                        <?php }
 
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/?tab=produtodisp" 
                         <?php if ($getTab == "produtodisp") {echo " selected ";} ?>>Produto Disponí­vel</option>
+                        <?php }
 
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/?tab=cupomcashback" 
                         <?php if ($getTab == "cupomcashback") {echo " selected ";} ?>>Cupom Cashback</option>
+                        <?php }
 
+                        if ($_SESSION['nivelMenu'] >= 4) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/?tab=apoio" 
                         <?php if ($getTab == "apoio") {echo " selected ";} ?>>Apoio</option>
+                        <?php } ?>
+
                     </select>
                 </div>
 
