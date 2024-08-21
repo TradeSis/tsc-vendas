@@ -53,6 +53,12 @@ if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && 
                         <?php }
                         if ($_SESSION['nivelMenu'] >= 2) { ?>
                             <li class="nav-item mr-1">
+                                <a class="nav-link <?php if ($tab == "promocoes") {echo " active ";} ?>"
+                                href="?tab=promocoes" role="tab">Promoções</a>
+                            </li>
+                        <?php }
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
+                            <li class="nav-item mr-1">
                                 <a class="nav-link <?php if ($tab == "bonusclien") {echo " active ";} ?>"
                                 href="?tab=bonusclien" role="tab">Bonus Cliente</a>
                             </li>
@@ -100,6 +106,11 @@ if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && 
                         <?php }
 
                         if ($_SESSION['nivelMenu'] >= 2) { ?>
+                        <option value="<?php echo URLROOT ?>/vendas/?tab=promocoes" 
+                        <?php if ($getTab == "promocoes") {echo " selected ";} ?>>Promoções</option>
+                        <?php }
+
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/?tab=bonusclien" 
                         <?php if ($getTab == "bonusclien") {echo " selected ";} ?>>Bonus Cliente</option>
                         <?php }
@@ -138,6 +149,9 @@ if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && 
 
             if ($tab == "desconto") {
                 $src = "consultas/desconto_parametros.php";
+            }
+            if ($tab == "promocoes") {
+                $src = "promocoes/";
             }
             if ($tab == "bonusclien") {
                 $src = "consultas/bonusclien.php";

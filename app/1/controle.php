@@ -43,7 +43,38 @@ if ($metodo == "GET") {
       include 'prevenprod.php';
       break;
 
+    case "fincotacluster":
+      include 'fincotacluster.php';
+    break;
 
+    case "fincotacllib":
+      include 'fincotacllib.php';
+    break;
+
+    case "fincotaclplan":
+      include 'fincotaclplan.php';
+      break;
+
+    case "fincotaetb":
+      include 'fincotaetb.php';
+      break;
+
+    case "fincotasuplib":
+      include 'fincotasuplib.php';
+      break;
+
+    case "fincotasup":
+      include 'fincotasup.php';
+      break;
+    
+    case "supervisor":
+      include 'supervisor.php';
+      break;
+
+    case "filialsupervisor":
+      include 'filialsupervisor.php';
+      break;
+      
     default:
       $jsonSaida = json_decode(
         json_encode(
@@ -71,6 +102,26 @@ if ($metodo == "PUT") {
 
     case "prevenprod":
       include 'prevenprod_salvar.php';
+      break;
+
+    case "fincotacluster":
+      include 'fincotacluster_inserir.php';
+      break;
+    
+    case "fincotacllib":
+      include 'fincotacllib_inserir.php';
+      break;
+
+    case "fincotaclplan":
+      include 'fincotaclplan_inserir.php';
+      break;
+
+    case "fincotasuplib":
+      include 'fincotasuplib_inserir.php';
+      break;
+
+    case "supervisor":
+      include 'supervisor_inserir.php';
       break;
 
     default:
@@ -107,9 +158,29 @@ if ($metodo == "POST") {
       include 'token_verifica.php';
       break;
 
-      case "prevenda":
-        include 'prevenda_finaliza.php';
-        break;
+    case "prevenda":
+      include 'prevenda_finaliza.php';
+      break;
+
+    case "fincotacluster":
+      include 'fincotacluster_alterar.php';
+      break;
+
+    case "fincotacllib":
+      include 'fincotacllib_alterar.php';
+      break;
+
+    case "fincotaetb":
+      include 'fincotaetb_alterar.php';
+      break;
+
+    case "fincotasuplib":
+      include 'fincotasuplib_alterar.php';
+      break;
+
+    case "supervisor":
+      include 'supervisor_alterar.php';
+      break;
 
     default:
       $jsonSaida = json_decode(
@@ -131,6 +202,23 @@ if ($metodo == "DELETE") {
     case "token":
       include 'token_excluir.php';
       break;
+
+    case "fincotacllib":
+      include 'fincotacllib_excluir.php';
+      break;
+
+    case "fincotaclplan":
+      include 'fincotaclplan_excluir.php';
+      break;
+
+    case "fincotasuplib":
+      include 'fincotasuplib_excluir.php';
+      break;
+
+    case "supervisor":
+      include 'supervisor_excluir.php';
+      break;
+  
 
     default:
       $jsonSaida = json_decode(
