@@ -1,4 +1,5 @@
 <?php
+// lucas 220820204 id1241 idUsuario virou idToken 
 // lucas 120320204 id884 bootstrap local - alterado head
 
 include_once('../header.php');
@@ -7,9 +8,7 @@ require_once ROOT . "/vendor/autoload.php";
 
 use PragmaRX\Google2FA\Google2FA;
 
-$idUsuario = $_GET['idUsuario'];
-$usuarios = buscaToken($_GET['idUsuario']);
-
+$idToken = $_GET['idToken'];
 
 $google2fa = new Google2FA();
 
@@ -24,7 +23,7 @@ if (URLROOT == "/tslebes-dev" && $_SERVER['SERVER_ADDR'] == "10.145.0.60") {
 
 $text = $google2fa->getQRCodeUrl(
     $nomeToken,
-    $idUsuario,
+    $idToken,
     $secret
 );
 
@@ -52,7 +51,7 @@ $image_url = 'https://quickchart.io/qr?size=300x300&text=' . $text;
                 <p style="text-align:center">
                     <?php echo '<img src="' . $image_url . '" />'; ?>
                 </p>
-                <input type="text" class="form-control" name="idUsuario" value="<?php echo $idUsuario ?>" hidden>
+                <input type="text" class="form-control" name="idToken" value="<?php echo $idToken ?>" hidden>
                 <input type="text" class="form-control" name="secret" value="<?php echo $secret ?>" hidden>
 
                 <h6 style="text-align:center;color:red;">Atenção: Não saia sem salvar!</h6>

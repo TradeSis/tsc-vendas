@@ -54,6 +54,10 @@ $supervisor = buscaSupervisores($supcod);
                     <label class="form-label ts-label">Nome</label>
                     <input type="text" class="form-control ts-input" name="supnom" value="<?php echo $supervisor[0]['supnom'] ?>">
                 </div>
+                <div class="col">
+                    <label class="form-label ts-label">Token</label>
+                    <input type="text" class="form-control ts-input" name="idToken" value="<?php echo $supervisor[0]['idToken'] ?>">
+                </div>
             </div>
 
             <div class="text-end mt-4">

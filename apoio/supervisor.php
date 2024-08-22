@@ -98,6 +98,7 @@ include_once(__DIR__ . '/../header.php');
                     <tr class="ts-headerTabelaLinhaCima">
                         <th>Cod</th>
                         <th>Nome</th>
+                        <th>Token</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -144,6 +145,7 @@ include_once(__DIR__ . '/../header.php');
 
                         linha = linha + "<td>" + object.supcod + "</td>";
                         linha = linha + "<td>" + object.supnom + "</td>";
+                        linha = linha + "<td>" + object.idToken + "</td>";
 
                         linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm me-1' href='supervisor_alterar.php?supcod=" + object.supcod + "' role='button'><i class='bi bi-pencil-square'></i></a>";
                         linha = linha + "<button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#excluirModal'";

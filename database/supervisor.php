@@ -33,9 +33,12 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "alterar") {
 
+		$idToken = isset($_POST["idToken"]) && $_POST["idToken"] !== "null"  ? $_POST["idToken"]  : null;
+
 		$apiEntrada = array(
 			'supcod' => $_POST['supcod'],
-            'supnom' => $_POST['supnom']
+            'supnom' => $_POST['supnom'],
+			'idToken' => $idToken
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'POST');

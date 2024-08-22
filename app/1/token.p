@@ -7,10 +7,12 @@ def var lokjson as log.                 /* LOGICAL DE APOIO */
 def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
-def temp-table ttentrada no-undo serialize-name "supervisor"   /* JSON ENTRADA */
-    field supcod     like supervisor.supcod
-    field supnom     like supervisor.supnom
-    field idToken     like supervisor.idToken.
+def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
+    field idToken like token.idToken.
+
+def temp-table tttoken  no-undo serialize-name "token"  /* JSON SAIDA */
+    like token
+    FIELD id_recid      AS INT64.    
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -33,11 +35,25 @@ then do:
     return.
 end.
 
-if ttentrada.supcod = ?
+
+FOR EACH token WHERE
+    (IF ttentrada.idToken = ?
+    THEN TRUE 
+    else token.idToken = ttentrada.idToken)
+    no-lock.
+         
+    create tttoken.
+    BUFFER-COPY token TO tttoken.
+    tttoken.id_recid = RECID(token).
+END.
+
+
+find first tttoken no-error.
+if not avail tttoken
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Dados de Entrada Invalidos".
+    ttsaida.descricaoStatus = "Token nao encontrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -46,35 +62,11 @@ then do:
     return.
 end.
 
-find supervisor where supervisor.supcod = ttentrada.supcod
-                        no-lock no-error.
-if not avail supervisor
-then do:
-    create ttsaida.
-    ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Supervisor nao cadastrado".
+hsaida  = TEMP-TABLE tttoken:handle.
 
-    hsaida  = temp-table ttsaida:handle.
-
-    lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
-    message string(vlcSaida).
-    return.
-end.
-
-do on error undo:
-    find supervisor where supervisor.supcod = ttentrada.supcod
-                           exclusive no-error.
-
-    supervisor.supnom = ttentrada.supnom.
-    supervisor.idToken = ttentrada.idToken.
-end.
-
-
-create ttsaida.
-ttsaida.tstatus = 200.
-ttsaida.descricaoStatus = "Supervisor alterada com sucesso".
-
-hsaida  = temp-table ttsaida:handle.
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
 put unformatted string(vlcSaida).
+return string(vlcSaida).
+
+

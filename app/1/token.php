@@ -1,29 +1,60 @@
 <?php
-// gabriel 21072023
+// lucas 22082024 - id 1241 passado programa para progress
+//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
 
-
-$conexao = conectaMysql();
-$usuarios = array();
-
-$sql = "SELECT * FROM token ";
-if (isset($jsonEntrada["idUsuario"])) {
-  $sql = $sql . " where token.idUsuario = '" . $jsonEntrada["idUsuario"] . "'";
+//LOG
+$LOG_CAMINHO = defineCaminhoLog();
+if (isset($LOG_CAMINHO)) {
+    $LOG_NIVEL = defineNivelLog();
+    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "token";
+    if (isset($LOG_NIVEL)) {
+        if ($LOG_NIVEL >= 1) {
+            $arquivo = fopen(defineCaminhoLog() . "vendas_" . date("dmY") . ".log", "a");
+        }
+    }
 }
-$rows = 0;
-$buscar = mysqli_query($conexao, $sql);
-while ($row = mysqli_fetch_array($buscar, MYSQLI_ASSOC)) {
-  unset($row['secret']);
-
-  array_push($usuarios, $row);
-  $rows = $rows + 1;
+if (isset($LOG_NIVEL)) {
+    if ($LOG_NIVEL == 1) {
+        fwrite($arquivo, $identificacao . "\n");
+    }
+    if ($LOG_NIVEL >= 2) {
+        fwrite($arquivo, $identificacao . "-ENTRADA->" . json_encode($jsonEntrada) . "\n");
+    }
 }
+//LOG
 
-if (isset($jsonEntrada["idUsuario"]) && $rows==1) {
-  $usuarios = $usuarios[0];
+$dados = array();
+
+
+$progr = new chamaprogress();
+$retorno = $progr->executarprogress("vendas/app/1/token", json_encode($jsonEntrada));
+fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
+$dados = json_decode($retorno,true);
+  if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
+      $dados = $dados["conteudoSaida"][0];
+  } else {
+    
+     if (!isset($dados["token"][0]) && ($jsonEntrada['idToken'] != null)) {  // Verifica se tem mais de 1 registro
+      $dados = $dados["token"][0]; // Retorno sem array
+    } else {
+      $dados = $dados["token"];  
+    }
+
+  }
+
+
+//$jsonSaida = array("usuarios" => $dados);
+$jsonSaida = $dados;
+
+
+//LOG
+if (isset($LOG_NIVEL)) {
+    if ($LOG_NIVEL >= 2) {
+        fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n\n");
+    }
 }
+//LOG
 
-$jsonSaida = array("usuarios" => $usuarios);
-
-
+fclose($arquivo);
 
 ?>

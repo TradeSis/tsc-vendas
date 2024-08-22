@@ -7,10 +7,9 @@ def var lokjson as log.                 /* LOGICAL DE APOIO */
 def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
-def temp-table ttentrada no-undo serialize-name "supervisor"   /* JSON ENTRADA */
-    field supcod     like supervisor.supcod
-    field supnom     like supervisor.supnom
-    field idToken     like supervisor.idToken.
+def temp-table ttentrada no-undo serialize-name "token"   /* JSON ENTRADA */
+    field idToken     like token.idToken
+    field secret     like token.secret.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -33,7 +32,7 @@ then do:
     return.
 end.
 
-if ttentrada.supcod = ?
+if ttentrada.idToken = ?
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
@@ -46,13 +45,13 @@ then do:
     return.
 end.
 
-find supervisor where supervisor.supcod = ttentrada.supcod
+find token where token.idToken = ttentrada.idToken
                         no-lock no-error.
-if not avail supervisor
+if not avail token
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Supervisor nao cadastrado".
+    ttsaida.descricaoStatus = "Token nao cadastrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -62,17 +61,16 @@ then do:
 end.
 
 do on error undo:
-    find supervisor where supervisor.supcod = ttentrada.supcod
+    find token where token.idToken = ttentrada.idToken
                            exclusive no-error.
 
-    supervisor.supnom = ttentrada.supnom.
-    supervisor.idToken = ttentrada.idToken.
+    token.secret = ttentrada.secret.
 end.
 
 
 create ttsaida.
 ttsaida.tstatus = 200.
-ttsaida.descricaoStatus = "Supervisor alterada com sucesso".
+ttsaida.descricaoStatus = "Token alterada com sucesso".
 
 hsaida  = temp-table ttsaida:handle.
 
