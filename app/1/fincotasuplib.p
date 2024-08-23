@@ -45,7 +45,9 @@ end.
 
 if ttentrada.fcccod <> ? AND ttentrada.supcod = ? AND ttentrada.DtIVig = ?
 THEN DO:
-    for each fincotasuplib where fincotasuplib.fcccod = ttentrada.fcccod no-lock.
+    for each fincotasuplib where fincotasuplib.fcccod = ttentrada.fcccod  and
+    fincotasuplib.dtivig <= today and
+   (fincotasuplib.dtfvig >= today or fincotasuplib.dtfvig = ?)no-lock.
     
          RUN criaCotasSupervisor.
     end.

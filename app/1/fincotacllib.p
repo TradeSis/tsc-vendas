@@ -43,7 +43,10 @@ end.
 
 IF ttentrada.fcccod <> ? AND ttentrada.Etbcod = ? AND ttentrada.DtIVig = ?
 THEN DO:
-    FOR EACH fincotacllib WHERE fincotacllib.fcccod = ttentrada.fcccod NO-LOCK:
+    FOR EACH fincotacllib WHERE fincotacllib.fcccod = ttentrada.fcccod and
+                fincotacllib.dtivig <= today and
+               (fincotacllib.dtfvig >= today or fincotacllib.dtfvig = ?)
+                NO-LOCK:
         RUN criaCotasFiliais.
     END.
 END.
