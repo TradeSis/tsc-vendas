@@ -9,7 +9,7 @@ if (isset($LOG_CAMINHO)) {
   $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "verificatoken";
   if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 1) {
-      $arquivo = fopen(defineCaminhoLog() . "vendas_" . date("dmY") . ".log", "a");
+      $arquivo = fopen(defineCaminhoLog() . "vendas_VERIFICA" . date("dmY") . ".log", "a");
     }
   }
 }
@@ -29,7 +29,11 @@ $dados = array();
 
 $progr = new chamaprogress();
 $retorno = $progr->executarprogress("vendas/app/1/token_verifica", json_encode($jsonEntrada));
-fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
+$dadosretorno = json_decode($retorno, true);
+$rowretorno['idToken'] = $dadosretorno["token"][0]["idToken"];
+$retornoFormat = array("token" => $rowretorno);
+fwrite($arquivo, $identificacao . "-RETORNO->" . json_encode($retornoFormat) . "\n");
+
 
 $dados = json_decode($retorno, true);
 if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
@@ -47,8 +51,9 @@ if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
     $row['senhaCorreta'] = false;
   }
 
-  array_push($dados, $row);
-  $jsonSaida = array("usuarios" => $dados);
+  //array_push($dados, $row);
+  //fwrite($arquivo, $identificacao . "-RETORNO DADOS->" . $dados[1] . "\n");
+  $jsonSaida = array("usuarios" => $row);
 }
 
 
