@@ -56,4 +56,19 @@ if (isset($_GET['operacao'])) {
 		return $promocoes;
 	}
 
+	if ($operacao == "cargaFilial") {
+	
+		$arryArquivo = $_FILES['file']['name'];
+		$varquivo = implode(" ", $arryArquivo);
+		
+		$apiEntrada = array(
+			'varquivo' => $varquivo
+		);
+
+		$carga = chamaAPI(null, '/vendas/fincotaclcarga', json_encode($apiEntrada), 'PUT');
+
+		echo json_encode($carga);
+		return $carga;
+	}
+
 }

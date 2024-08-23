@@ -124,6 +124,10 @@ if ($metodo == "PUT") {
       include 'supervisor_inserir.php';
       break;
 
+    case "fincotaclcarga":
+      include 'fincotaclcarga.php';
+      break;
+
     default:
       $jsonSaida = json_decode(
         json_encode(
