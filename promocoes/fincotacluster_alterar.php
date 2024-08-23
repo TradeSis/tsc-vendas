@@ -359,10 +359,8 @@ $fcccod = $cluster['fcccod'];
     <!-- LOCAL PARA COLOCAR OS JS -->
 
     <?php include_once ROOT . "/vendor/footer_js.php"; ?>
-    <?php //include 'modalAlterarSenha.php'; 
-    ?>
-    <?php include 'zoomEstab.php'; ?>
-    <?php include 'zoomFinan.php'; ?>
+    <?php include ROOT . '/cadastros/cadastros/zoomEstab.php'; ?>
+    <?php include ROOT . '/crediario/consultas/zoomFinan.php'; ?>
     <script>
         window.onload = function() {
             tabContent = document.getElementsByClassName('tabContent');
