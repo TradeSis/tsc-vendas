@@ -47,6 +47,21 @@ then do:
     return.
 end.
 
+find finan where finan.fincod = ttentrada.fincod 
+                        no-lock no-error.
+if not avail finan
+then do:
+    create ttsaida.
+    ttsaida.tstatus = 400.
+    ttsaida.descricaoStatus = "Plano nao existe".
+
+    hsaida  = temp-table ttsaida:handle.
+
+    lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
+    message string(vlcSaida).
+    return.
+end.
+
 do on error undo:
   create fincotaclplan.
   fincotaclplan.fincod = ttentrada.fincod.

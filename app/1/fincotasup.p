@@ -40,31 +40,33 @@ then do:
 end.
 
 prec = ttentrada.id_recid.
-find fincotacllib where recid(fincotacllib) = prec no-lock.
-find fincotacluster of fincotacllib no-lock.
-
-find estab of fincotacllib no-lock.
+find fincotasuplib where recid(fincotasuplib) = prec no-lock.
+find fincotacluster of fincotasuplib no-lock.
 
 for each fincotaclplan of fincotacluster no-lock.
-    for each fincotasup where
-            fincotasup.etbcod = fincotacllib.etbcod and
-            fincotasup.fincod = fincotaclplan.fincod and
-            fincotasup.dtivig = fincotacllib.dtivig
-            no-lock.
-        
-        find finan where finan.fincod = fincotasup.fincod no-lock.
-        
-        create ttfincotasup.
-        ttfincotasup.Etbcod = fincotasup.Etbcod.
-        ttfincotasup.fincod = fincotasup.fincod.  
-        ttfincotasup.DtIVig = fincotasup.DtIVig.
-        ttfincotasup.DtFVig = fincotasup.DtFVig.
-        ttfincotasup.Ativo = fincotasup.Ativo.
-        ttfincotasup.CotasLib = fincotasup.CotasLib.
-        ttfincotasup.CotasUso = fincotasup.CotasUso.
-        ttfincotasup.finnom = finan.finnom.
-        
-        ttfincotasup.id_recid = RECID(fincotasup).
+    for each estab where estab.supcod = fincotasuplib.supcod no-lock.
+        for each fincotasup where
+                fincotasup.etbcod = estab.etbcod and
+                fincotasup.supcod = fincotasuplib.supcod and
+                fincotasup.fincod = fincotaclplan.fincod and
+                fincotasup.dtivig = fincotasuplib.dtivig
+                no-lock.
+            
+            find finan where finan.fincod = fincotasup.fincod no-lock.
+            
+            create ttfincotasup.
+            ttfincotasup.Etbcod = estab.Etbcod.
+            ttfincotasup.supcod = fincotasuplib.supcod.
+            ttfincotasup.fincod = fincotasup.fincod.  
+            ttfincotasup.DtIVig = fincotasup.DtIVig.
+            ttfincotasup.DtFVig = fincotasup.DtFVig.
+            ttfincotasup.Ativo = fincotasup.Ativo.
+            ttfincotasup.CotasLib = fincotasup.CotasLib.
+            ttfincotasup.CotasUso = fincotasup.CotasUso.
+            ttfincotasup.finnom = finan.finnom.
+            
+            ttfincotasup.id_recid = RECID(fincotasup).
+        end.
     end.
 end.
 
@@ -91,5 +93,6 @@ hsaida  = TEMP-TABLE ttfincotasup:handle.
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
 put unformatted string(vlcSaida).
 return string(vlcSaida).
+
 
 
