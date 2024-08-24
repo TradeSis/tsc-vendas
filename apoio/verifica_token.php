@@ -13,10 +13,10 @@ if ($token === "") {
                        
 $usuarios = verificaToken($user, $token);
 
-if (isset($usuarios["usuarios"][1]['senhaCorreta'])) {
-    if ($usuarios["usuarios"][1]['senhaCorreta'] == false) {
+if (isset($usuarios["usuarios"]['senhaCorreta'])) {
+    if ($usuarios["usuarios"]['senhaCorreta'] == false) {
         
-        $mensagem = "Token não cadastrado ou incorreto!";
+        $mensagem = "Token incorreto!";
         header('Location: ../apoio/token.php?&mensagem=' . urlencode($mensagem));
     } else {
         $mensagem = "Usuário verificado com sucesso!";

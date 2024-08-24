@@ -35,11 +35,10 @@ then do:
 end.
 
 
-FOR EACH token WHERE  token.idToken = ttentrada.idToken no-lock.
-         
+FIND token WHERE  token.idToken = ttentrada.idToken no-lock.      
     create tttoken.
     BUFFER-COPY token TO tttoken.
-END.
+
 
 
 find first tttoken no-error.
