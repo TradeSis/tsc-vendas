@@ -25,14 +25,46 @@ include_once(__DIR__ . '/../header.php');
 
         <div class="row d-flex align-items-center justify-content-center mt-1 pt-1 ">
 
-            <div class="col-10">
+            <div class="col-8">
                 <h2 class="ts-tituloPrincipal">Clusters de Planos</h2>
+            </div>
+
+            <div class="col-2">
+                <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                    <input type="file" id="arquivo" class="custom-file-upload" name="file[]" style="color:#567381; display:none" accept="text/csv" multiple>
+                    <label for="arquivo">
+                        <a class="btn btn-primary">
+                            <i class="bi bi-file-earmark-arrow-down-fill" style="color:#fff"></i>&#32;<h7 style="color: #fff;">Carga Filial</h7>
+                        </a>
+                    </label>
+                </form>
             </div>
 
             <div class="col-2 text-end">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#inserirModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
             </div>
 
+        </div>
+
+        <!--------- CARGA FILIAL --------->
+        <div class="modal" id="cargaFilialModal" tabindex="-1" aria-labelledby="cargaFilialModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="refreshPage()"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <div class="row mt-2">
+                            <div class="col text-center">
+                                <div class="alert alertMesg" role="alert" id="textomensagem"></div>
+                            </div>
+                        </div>
+                    </div><!--body-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="refreshPage()">Fechar</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!--------- INSERIR --------->
@@ -108,7 +140,7 @@ include_once(__DIR__ . '/../header.php');
                 </tbody>
             </table>
         </div>
-       
+
         <h6 class="fixed-bottom" id="textocontador" style="color: #13216A;"></h6>
 
 
@@ -145,13 +177,13 @@ include_once(__DIR__ . '/../header.php');
 
                         linha = linha + "<td>" + object.fcccod + "</td>";
                         linha = linha + "<td>" + object.fccnom + "</td>";
-                        linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm' href='fincotacluster_alterar.php?fcccod=" +  object.fcccod + "' role='button'><i class='bi bi-pencil-square'></i></a></td> ";
+                        linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm' href='fincotacluster_alterar.php?fcccod=" + object.fcccod + "' role='button'><i class='bi bi-pencil-square'></i></a></td> ";
 
                         linha = linha + "</tr>";
                     }
 
                     $("#dados").html(linha);
-                   
+
                     var texto = $("#textocontador");
                     texto.html('Total: ' + contadorItem);
 
@@ -209,6 +241,45 @@ include_once(__DIR__ . '/../header.php');
         function refreshPage() {
             window.location.reload();
         }
+
+        /* MODAL DE CARGA */
+        $(document).ready(function() {
+            $('#arquivo').on('change', function() {
+                var formData = new FormData(document.getElementById('uploadForm'));
+
+                $.ajax({
+                    type: 'POST',
+                    url: "../database/fincotacluster.php?operacao=cargaFilial",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(msg) {
+                     
+                        var json = JSON.parse(msg);
+                        if (json['status'] == 200) {
+                            var texto = $("#textomensagem");
+                            texto.html(json['descricaoStatus']);
+                            $('.alertMesg').addClass('alert-success');
+                            $('.alertMesg').removeClass('alert-danger');
+                            $('#cargaFilialModal').modal('show');
+                        }
+
+                        if (json['status'] == 400) {
+                            var texto = $("#textomensagem");
+                            texto.html(json['descricaoStatus']);
+                            $('.alertMesg').addClass('alert-danger');
+                            $('.alertMesg').removeClass('alert-success');
+                            $('#cargaFilialModal').modal('show');
+                        }
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        alert("ERRO=" + JSON.stringify(error));
+                    }
+                });
+
+            });
+        });
     </script>
 
     <!-- LOCAL PARA COLOCAR OS JS -FIM -->
