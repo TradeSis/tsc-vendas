@@ -8,7 +8,7 @@ def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
 
-def temp-table ttentrada no-undo serialize-name "supervisor"   /* JSON ENTRADA */
+def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field supcod  like supervisor.supcod
     field pagina  AS INT.
 

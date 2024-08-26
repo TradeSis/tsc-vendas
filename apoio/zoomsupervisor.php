@@ -80,14 +80,11 @@
                 var json = JSON.parse(msg);
                 var linhasup = "";
                 if (json === null) {
-                    alert("x1")
                         $("#dadosZoomSupervisor").html("Erro ao buscar");
                 } 
                 if (json.status === 400) {
-                    alert("x2")
                         $("#dadosZoomSupervisor").html("Nenhum supervisor foi encontrado");
                 } else {
-                    //alert("x3")
                     $("#dadosZoomSupervisor").html("<tr><td>aqqqqqq</td></tr>");
                     for (var $i = 0; $i < json.length; $i++) {
                         var object = json[$i];

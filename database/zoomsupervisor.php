@@ -19,9 +19,14 @@ if (isset($_GET['operacao'])) {
 		
 		$apiEntrada = 
 		array(
-			'supcod' => $supcod,
-			'pagina' => $pagina
+			"dadosEntrada" => array(
+				array(
+					'supcod' => $supcod,
+					'pagina' => $pagina
+				)
+			)
 		);
+
 		$supervisor = chamaAPI(null, '/vendas/zoomsupervisor', json_encode($apiEntrada), 'GET');
 
 		echo json_encode($supervisor);

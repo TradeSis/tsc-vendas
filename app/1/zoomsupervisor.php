@@ -35,8 +35,13 @@ $dados = json_decode($retorno, true);
 if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
     $dados = $dados["conteudoSaida"][0];
 } else {
+    if(($jsonEntrada['dadosEntrada'][0]['supcod'] != null)){
+        $dados = $dados['supervisor'][0];
+    }else{
+        $dados = $dados["supervisor"];
+    }
 
-    $dados = $dados["supervisor"];
+    
 
 }
 
