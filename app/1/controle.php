@@ -74,10 +74,6 @@ if ($metodo == "GET") {
     case "filialsupervisor":
       include 'filialsupervisor.php';
       break;
-
-    case "zoomsupervisor":
-      include 'zoomsupervisor.php';
-      break;
       
     default:
       $jsonSaida = json_decode(
