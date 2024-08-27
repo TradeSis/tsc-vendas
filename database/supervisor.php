@@ -79,4 +79,25 @@ if (isset($_GET['operacao'])) {
 		return $filiais;
 	}
 
+	if ($operacao == "zoomsupervisor") {
+
+		$supcod = isset($_POST["supcod"])  && $_POST["supcod"] !== "" && $_POST["supcod"] !== "null" ? $_POST["supcod"]  : null;
+		$pagina = isset($_POST["pagina"])  && $_POST["pagina"] !== "" && $_POST["pagina"] !== "null" ? $_POST["pagina"]  : 0;
+		
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'supcod' => $supcod,
+					'pagina' => $pagina
+				)
+			)
+		);
+
+		$supervisor = chamaAPI(null, '/vendas/zoomsupervisor', json_encode($apiEntrada), 'GET');
+
+		echo json_encode($supervisor);
+		return $supervisor;
+	}
+
 }

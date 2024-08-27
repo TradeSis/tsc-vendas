@@ -364,9 +364,9 @@ $contrassin = "Nao";
     </div>
 
     <!-- MODAIS DE ZOOM -->
-    <?php include ROOT . '/cadastros/cadastros/zoomEstab.php'; ?>
-    <?php include ROOT . '/crediario/consultas/zoomFinan.php'; ?>
-    <?php include ROOT . '/vendas/apoio/zoomsupervisor.php'; ?>
+    <?php include ROOT . '/cadastros/zoom/estab.php'; ?>
+    <?php include ROOT . '/crediario/zoom/finan.php'; ?>
+    <?php include ROOT . '/vendas/zoom/supervisor.php'; ?>
 
     <!-- LOCAL PARA COLOCAR OS JS -->
 

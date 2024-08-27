@@ -66,7 +66,7 @@
         $.ajax({
             type: 'POST',
             dataType: 'html',
-            url: "<?php echo URLROOT ?>/vendas/database/zoomsupervisor.php?operacao=buscar",
+            url: "<?php echo URLROOT ?>/vendas/database/supervisor.php?operacao=zoomsupervisor",
             beforeSend: function () {
                 $("#dadosZoomSupervisor").html("Carregando...");
             },
