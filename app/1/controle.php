@@ -132,6 +132,10 @@ if ($metodo == "PUT") {
       include 'fincotaclcarga.php';
       break;
 
+    case "fincotarel":
+      include 'fincotarel.php';
+      break;
+
     default:
       $jsonSaida = json_decode(
         json_encode(
