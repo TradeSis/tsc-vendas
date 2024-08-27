@@ -6,6 +6,7 @@ include_once('../database/fincotacluster.php');
 $cluster = buscaCluster($_GET['fcccod']);
 $fcccod = $cluster['fcccod'];
 
+$contrassin = "Nao";
 ?>
 
 <!doctype html>
@@ -362,12 +363,15 @@ $fcccod = $cluster['fcccod'];
         </div>
     </div>
 
-    <!-- LOCAL PARA COLOCAR OS JS -->
-
-    <?php include_once ROOT . "/vendor/footer_js.php"; ?>
+    <!-- MODAIS DE ZOOM -->
     <?php include ROOT . '/cadastros/cadastros/zoomEstab.php'; ?>
     <?php include ROOT . '/crediario/consultas/zoomFinan.php'; ?>
     <?php include ROOT . '/vendas/apoio/zoomsupervisor.php'; ?>
+
+    <!-- LOCAL PARA COLOCAR OS JS -->
+
+    <?php include_once ROOT . "/vendor/footer_js.php"; ?>
+
     <script>
         window.onload = function() {
             tabContent = document.getElementsByClassName('tabContent');
