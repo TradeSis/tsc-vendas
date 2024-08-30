@@ -36,23 +36,13 @@ varPagina = ttentrada.pagina + 10.
 IF ttentrada.supcod <> ?
 then do:
     find supervisor where supervisor.supcod = ttentrada.supcod no-lock no-error.
-    if not avail supervisor
+    if avail supervisor
     then do:
-        create ttsaida.
-        ttsaida.tstatus = 400.
-        ttsaida.retorno = "supervisor nao encontrado".
-
-        hsaida  = temp-table ttsaida:handle.
-
-        lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
-        message string(vlcSaida).
-        return.
+        create ttsupervisor.
+        ttsupervisor.supcod    = supervisor.supcod.
+        ttsupervisor.supnom    = supervisor.supnom.
+        ttsupervisor.id_recid = recid(supervisor).
     end.
-
-    create ttsupervisor.
-    ttsupervisor.supcod    = supervisor.supcod.
-    ttsupervisor.supnom    = supervisor.supnom.
-    ttsupervisor.id_recid = recid(supervisor).
 end. 
 ELSE DO:
     for each supervisor no-lock.
