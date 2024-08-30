@@ -57,7 +57,7 @@
 
 
     $(document).on('click', 'button[data-bs-target="#zoomSupervisorModal"]', function() {
-        buscarSup($("#buscaSupervisor").val(), pagina);
+        buscarSup(null, pagina);
     });
 
 

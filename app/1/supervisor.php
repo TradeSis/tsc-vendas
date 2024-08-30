@@ -33,13 +33,7 @@ $dados = json_decode($retorno,true);
   if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
       $dados = $dados["conteudoSaida"][0];
   } else {
-    
-     if (!isset($dados["supervisor"][0]) && ($jsonEntrada['supcod'] != null)) {  // Verifica se tem mais de 1 registro
-      $dados = $dados["supervisor"][0]; // Retorno sem array
-    } else {
       $dados = $dados["supervisor"];  
-    }
-
   }
 
 

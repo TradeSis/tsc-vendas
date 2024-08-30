@@ -7,53 +7,71 @@ def var lokjson as log.                 /* LOGICAL DE APOIO */
 def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
+
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field supcod like supervisor.supcod.
+    field supcod  like supervisor.supcod
+    field pagina  AS INT
+    field tempaginacao as log.
 
 def temp-table ttsupervisor  no-undo serialize-name "supervisor"  /* JSON SAIDA */
     like supervisor
-    FIELD id_recid      AS INT64.    
+    field id_recid as int64.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
-    field descricaoStatus      as char.
+    field retorno      as char.
 
+DEF VAR contador AS INT.
+DEF VAR varPagina AS INT.
 
 hEntrada = temp-table ttentrada:HANDLE.
 lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
-
 find first ttentrada no-error.
-if not avail ttentrada
+
+
+contador = 0.
+varPagina = ttentrada.pagina + 10.
+
+
+IF ttentrada.supcod <> ?
 then do:
-    create ttsaida.
-    ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Dados de Entrada nao encontrados".
+    find supervisor where supervisor.supcod = ttentrada.supcod no-lock.
 
-    hsaida  = temp-table ttsaida:handle.
-
-    lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
-    message string(vlcSaida).
-    return.
-end.
-
-FOR EACH supervisor WHERE
-    (IF ttentrada.supcod = ?
-    THEN TRUE 
-    else supervisor.supcod = ttentrada.supcod)
-    no-lock.
-         
     create ttsupervisor.
-    BUFFER-COPY supervisor TO ttsupervisor.
-    ttsupervisor.id_recid = RECID(supervisor).
-END.    
+    ttsupervisor.supcod    = supervisor.supcod.
+    ttsupervisor.supnom    = supervisor.supnom.
+    ttsupervisor.id_recid = recid(supervisor).
+end. 
+ELSE DO:
+    for each supervisor no-lock.
+        if ttentrada.tempaginacao = true
+        then do:    
+            contador = contador + 1.
+            IF contador > ttentrada.pagina and contador <= varPagina THEN DO:
+                create ttsupervisor.
+                ttsupervisor.supcod    = supervisor.supcod.
+                ttsupervisor.supnom    = supervisor.supnom.
+                ttsupervisor.id_recid = recid(supervisor).
+            end.
+        end.
+        else do:
+            create ttsupervisor.
+                ttsupervisor.supcod    = supervisor.supcod.
+                ttsupervisor.supnom    = supervisor.supnom.
+                ttsupervisor.id_recid = recid(supervisor).
+        end.    
+    end.
+END.
+    
 
-      
+
 find first ttsupervisor no-error.
+
 if not avail ttsupervisor
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Supervisor nao encontrado".
+    ttsaida.retorno = "supervisor nao encontrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -66,5 +84,17 @@ hsaida  = TEMP-TABLE ttsupervisor:handle.
 
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
-put unformatted string(vlcSaida).
-return string(vlcSaida).
+
+/* export LONG VAR*/
+DEF VAR vMEMPTR AS MEMPTR  NO-UNDO.
+DEF VAR vloop   AS INT     NO-UNDO.
+if length(vlcsaida) > 30000
+then do:
+    COPY-LOB FROM vlcsaida TO vMEMPTR.
+    DO vLOOP = 1 TO LENGTH(vlcsaida): 
+        put unformatted GET-STRING(vMEMPTR, vLOOP, 1). 
+    END.
+end.
+else do:
+    put unformatted string(vlcSaida).
+end.
