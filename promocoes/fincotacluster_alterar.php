@@ -657,7 +657,14 @@ $contrassin = "Nao";
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: refreshPage
+                success: function(data) {
+                    var json = JSON.parse(data);
+                    if (json['status'] == 400) {
+                        alert(json['descricaoStatus'])
+                    } else {
+                        refreshPage()
+                    }
+                }
             });
         });
 

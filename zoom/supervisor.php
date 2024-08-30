@@ -53,15 +53,15 @@
 <?php include_once ROOT . "/vendor/footer_js.php"; ?>
 
 <script>
-    var pagina = 0;
+    var paginaZoomSup = 0;
 
 
     $(document).on('click', 'button[data-bs-target="#zoomSupervisorModal"]', function() {
-        buscarSup(null, pagina);
+        buscarSup(null, 0);
     });
 
 
-    function buscarSup(buscaSupervisor, pagina) {
+    function buscarSup(buscaSupervisor, paginaZoomSup) {
         //alert (buscaSupervisor);
         $.ajax({
             type: 'POST',
@@ -72,7 +72,7 @@
             },
             data: {
                 supcod: buscaSupervisor,
-                pagina: pagina
+                pagina: paginaZoomSup
             },
             async: false,
             success: function (msg) {
@@ -97,7 +97,7 @@
                     $("#dadosZoomSupervisor").html(linhasup);
 
                     $("#prevPage_supervisor, #nextPage_supervisor").show();
-                    if (pagina == 0) {
+                    if (paginaZoomSup == 0) {
                         $("#prevPage_supervisor").hide();
                     }
                     if (json.length < 10) {
@@ -118,15 +118,15 @@
     });
 
     $("#prevPage_supervisor").click(function () {
-        if (pagina > 0) {
-            pagina -= 10;
-            buscarSup($("#buscaSupervisor").val(), pagina);
+        if (paginaZoomSup > 0) {
+            paginaZoomSup -= 10;
+            buscarSup($("#buscaSupervisor").val(), paginaZoomSup);
         }
     });
 
     $("#nextPage_supervisor").click(function () {
-        pagina += 10;
-        buscarSup($("#buscaSupervisor").val(), pagina);
+        paginaZoomSup += 10;
+        buscarSup($("#buscaSupervisor").val(), paginaZoomSup);
     });
 
 </script>

@@ -52,6 +52,20 @@ then do:
     return.
 end.
 
+find estab where estab.etbcod = ttentrada.Etbcod NO-LOCK NO-ERROR.
+    if not avail estab
+    then do:
+        create ttsaida.
+        ttsaida.tstatus = 400.
+        ttsaida.descricaoStatus = "estab nao encontrado".
+
+        hsaida  = temp-table ttsaida:handle.
+
+        lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
+        message string(vlcSaida).
+        return.
+    end.
+
 do on error undo:
   create fincotacllib.
   fincotacllib.Etbcod = ttentrada.Etbcod.

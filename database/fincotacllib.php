@@ -34,7 +34,8 @@ if (isset($_GET['operacao'])) {
 		);
 	
 		$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'PUT');
-		
+		echo json_encode($filiais);
+		return $filiais;
 
 	}
 
