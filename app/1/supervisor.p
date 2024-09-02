@@ -49,12 +49,14 @@ ELSE DO:
         if ttentrada.tempaginacao = true
         then do:    
             contador = contador + 1.
-            IF contador > ttentrada.pagina and contador <= varPagina THEN DO:
-                create ttsupervisor.
-                ttsupervisor.supcod    = supervisor.supcod.
-                ttsupervisor.supnom    = supervisor.supnom.
-                ttsupervisor.id_recid = recid(supervisor).
-            end.
+            if contador <= ttentrada.pagina THEN NEXT.
+            if contador > varPagina         THEN LEAVE.
+
+            create ttsupervisor.
+            ttsupervisor.supcod    = supervisor.supcod.
+            ttsupervisor.supnom    = supervisor.supnom.
+            ttsupervisor.id_recid = recid(supervisor).
+        
         end.
         else do:
             create ttsupervisor.

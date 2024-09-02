@@ -108,11 +108,13 @@
         });
     }
     $("#btnBuscarSupervisor").click(function () {
+        paginaZoomSup = 0;
         buscarSup($("#buscaSupervisor").val(), 0);
     })
 
     document.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
+            paginaZoomSup = 0;
             buscarSup($("#buscaSupervisor").val(), 0);
         }
     });
