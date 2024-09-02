@@ -56,9 +56,16 @@ if (isset($_GET['operacao'])) {
 	if ($operacao == "buscar") {
 
         $supcod = isset($_POST["supcod"]) && $_POST["supcod"] !== "null"  ? $_POST["supcod"]  : null;
+		$pagina = isset($_POST["pagina"])  && $_POST["pagina"] !== "" && $_POST["pagina"] !== "null" ? $_POST["pagina"]  : 0;
 		
-		$apiEntrada = array(
-            'supcod' => $supcod
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'supcod' => $supcod,
+					'pagina' => $pagina
+				)
+			)
 		);
 		$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'GET');
 
@@ -77,6 +84,28 @@ if (isset($_GET['operacao'])) {
 
 		echo json_encode($filiais);
 		return $filiais;
+	}
+
+	if ($operacao == "zoomsupervisor") {
+
+		$supcod = isset($_POST["supcod"])  && $_POST["supcod"] !== "" && $_POST["supcod"] !== "null" ? $_POST["supcod"]  : null;
+		$pagina = isset($_POST["pagina"])  && $_POST["pagina"] !== "" && $_POST["pagina"] !== "null" ? $_POST["pagina"]  : 0;
+		
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'supcod' => $supcod,
+					'pagina' => $pagina,
+					'tempaginacao' => true
+				)
+			)
+		);
+
+		$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'GET');
+
+		echo json_encode($supervisor);
+		return $supervisor;
 	}
 
 }

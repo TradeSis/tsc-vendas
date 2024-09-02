@@ -71,4 +71,23 @@ if (isset($_GET['operacao'])) {
 		return $carga;
 	}
 
+	if ($operacao == "relatorio") {
+		
+		$pfiltraperiodo = isset($_POST["pfiltraperiodo"]) && $_POST["pfiltraperiodo"] == "Sim"  ? true  : false;
+		$pdtini = isset($_POST["pdtini"]) && $_POST["pdtini"] !== ""  ? $_POST["pdtini"]  : null;
+		$pdtfim = isset($_POST["pdtfim"]) && $_POST["pdtfim"] !== ""  ? $_POST["pdtfim"]  : null;
+
+		$apiEntrada = array(
+			'petbcod' => $_POST["petbcod"],
+            'pfiltraperiodo' => $pfiltraperiodo,
+			'pdtini' => $pdtini,
+            'pdtfim' => $pdtfim
+		);
+
+		$relatorio = chamaAPI(null, '/vendas/fincotarel', json_encode($apiEntrada), 'PUT');
+
+		echo json_encode($relatorio);
+		return $relatorio;
+	}
+
 }

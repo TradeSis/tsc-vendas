@@ -25,7 +25,7 @@ include_once(__DIR__ . '/../header.php');
 
         <div class="row d-flex align-items-center justify-content-center mt-1 pt-1 ">
 
-            <div class="col-8">
+            <div class="col-5">
                 <h2 class="ts-tituloPrincipal">Clusters de Planos</h2>
             </div>
 
@@ -40,10 +40,69 @@ include_once(__DIR__ . '/../header.php');
                 </form>
             </div>
 
+            <div class="col-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#relatorioModal">
+                <i class="bi bi-file-earmark-arrow-up-fill"></i>&#32; Relatório de Cotas e Cluster</button>
+            </div>
+
             <div class="col-2 text-end">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#inserirModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
             </div>
 
+        </div>
+
+        <!-- Relatorio de Cotas e Cluster -->
+        <div class="modal" id="relatorioModal" tabindex="-1" aria-labelledby="relatorioModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Relatório de Cotas e Cluster</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="refreshPage()"></button>
+                    </div>
+                    <div class="divform">
+                        <div class="modal-body">
+                            <form method="post" id="relatorioForm">
+                                <div class="row mt-2">
+                                    <div class="col">
+                                        <label class="form-label ts-label">informe filial ou zero para todas</label>
+                                        <input type="number" class="form-control ts-input" name="petbcod" value="0">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col">
+                                        <label class="form-label ts-label">filtrar periodo?</label>
+                                        <select class="form-select ts-input" name="pfiltraperiodo">
+                                            <option value="Nao">Nao</option>
+                                            <option value="Sim">Sim</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label ts-label">de:</label>
+                                        <input type="date" class="form-control ts-input" name="pdtini">
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label ts-label">até:</label>
+                                        <input type="date" class="form-control ts-input" name="pdtfim">
+                                    </div>
+                                </div>
+                        </div><!--body-->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Gerar</button>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="divmensagem d-none">
+                        <div class="modal-body">
+                            <div class="col text-center">
+                                <div class="alert alertMesg" role="alert" id="mensagemRelatorio"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="refreshPage()">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!--------- CARGA FILIAL --------->
@@ -53,7 +112,7 @@ include_once(__DIR__ . '/../header.php');
                     <div class="modal-header">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="refreshPage()"></button>
                     </div>
-                    <div class="modal-body pt-0">
+                    <div class="modal-body">
                         <div class="row mt-2">
                             <div class="col text-center">
                                 <div class="alert alertMesg" role="alert" id="textomensagem"></div>
@@ -238,6 +297,44 @@ include_once(__DIR__ . '/../header.php');
             });
         });
 
+        $("#relatorioForm").submit(function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "../database/fincotacluster.php?operacao=relatorio",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                //success: refreshPage
+                success: function(data) {
+                    var json = JSON.parse(data);
+                    if (json['status'] == 400) {
+                        //alert(json['descricaoStatus'])
+                        $('.divform').toggleClass('d-none');
+                        $('.divmensagem').toggleClass('d-none');
+                        var texto = $("#mensagemRelatorio");
+                        texto.html(json['descricaoStatus']);
+
+                        $('.alertMesg').addClass('alert-danger');
+                        $('.alertMesg').removeClass('alert-success');
+                    } else {
+                        //alert(json['descricaoStatus'])
+                        $('.divform').toggleClass('d-none');
+                        $('.divmensagem').toggleClass('d-none');
+                        var texto = $("#mensagemRelatorio");
+                        texto.html(json['descricaoStatus']);
+
+                        $('.alertMesg').addClass('alert-success');
+                        $('.alertMesg').removeClass('alert-danger');
+
+                    }
+
+
+                }
+            });
+        });
+
         function refreshPage() {
             window.location.reload();
         }
@@ -254,7 +351,7 @@ include_once(__DIR__ . '/../header.php');
                     processData: false,
                     contentType: false,
                     success: function(msg) {
-                     
+
                         var json = JSON.parse(msg);
                         if (json['status'] == 200) {
                             var texto = $("#textomensagem");
@@ -271,7 +368,7 @@ include_once(__DIR__ . '/../header.php');
                             $('.alertMesg').removeClass('alert-success');
                             $('#cargaFilialModal').modal('show');
                         }
-                        
+
                     },
                     error: function(xhr, status, error) {
                         alert("ERRO=" + JSON.stringify(error));
