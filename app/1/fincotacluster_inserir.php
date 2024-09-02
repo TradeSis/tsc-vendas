@@ -1,5 +1,4 @@
 <?php
-// lucas 22082024 - id 1241 passado programa para progress
 // PROGRESS
 // ALTERAR E INSERIR
 
@@ -8,7 +7,7 @@
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
     $LOG_NIVEL = defineNivelLog();
-    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "token_inserir";
+    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "fincotacluster_inserir";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
             $arquivo = fopen(defineCaminhoLog() . "vendas_" . date("dmY") . ".log", "a");
@@ -25,12 +24,12 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-if (isset($jsonEntrada['idToken'])) {
+if (isset($jsonEntrada['fcccod'])) {
 
     try {
 
         $progr = new chamaprogress();
-        $retorno = $progr->executarprogress("vendas/app/1/token_inserir",json_encode($jsonEntrada));
+        $retorno = $progr->executarprogress("vendas/app/1/fincotacluster_inserir",json_encode($jsonEntrada));
         fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
         $conteudoSaida = json_decode($retorno,true);
         if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
