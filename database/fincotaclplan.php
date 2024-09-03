@@ -9,9 +9,14 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "inserir") {
 		
-		$apiEntrada = array(
-			'fincod' => $_POST['fincod'],
-            'fcccod' => $_POST['fcccod']
+		$apiEntrada = 
+		array(
+			"fincotaclplan" => array(
+				array(
+					'fincod' => $_POST['fincod'],
+            		'fcccod' => $_POST['fcccod']
+				)
+			)
 		);
 	
 		$planos = chamaAPI(null, '/vendas/fincotaclplan', json_encode($apiEntrada), 'PUT');
@@ -22,8 +27,13 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "excluir") {
 
-		$apiEntrada = array(
-			'id_recid' => $_POST['id_recid']
+		$apiEntrada = 
+		array(
+			"fincotaclplan" => array(
+				array(
+					'id_recid' => $_POST['id_recid']
+				)
+			)
 		);
 	
 		$planos = chamaAPI(null, '/vendas/fincotaclplan', json_encode($apiEntrada), 'DELETE');
@@ -34,10 +44,16 @@ if (isset($_GET['operacao'])) {
 		$fincod = isset($_POST["fincod"]) && $_POST["fincod"] !== "null"  ? $_POST["fincod"]  : null;
         $fcccod = isset($_POST["fcccod"]) && $_POST["fcccod"] !== "null"  ? $_POST["fcccod"]  : null;
 
-		$apiEntrada = array(
-            'fincod' => $fincod,
-            'fcccod' => $fcccod
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'fincod' => $fincod,
+            		'fcccod' => $fcccod
+				)
+			)
 		);
+
 		$planos = chamaAPI(null, '/vendas/fincotaclplan', json_encode($apiEntrada), 'GET');
 
 		echo json_encode($planos);

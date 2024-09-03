@@ -7,9 +7,13 @@ function buscaSupervisores($supcod = null)
 {
 	
 	$supervisor = array();
-
-	$apiEntrada = array(
-		'supcod' => $supcod
+	$apiEntrada = 
+	array(
+		"dadosEntrada" => array(
+			array(
+				'supcod' => $supcod
+			)
+		)
 	);
 
 	$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'GET');
@@ -22,9 +26,14 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "inserir") {
 	
-		$apiEntrada = array(
-			'supcod' => $_POST['supcod'],
-            'supnom' => $_POST['supnom']
+		$apiEntrada = 
+		array(
+			"supervisor" => array(
+				array(
+					'supcod' => $_POST['supcod'],
+            		'supnom' => $_POST['supnom']
+				)
+			)
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'PUT');
@@ -35,10 +44,15 @@ if (isset($_GET['operacao'])) {
 
 		$idToken = isset($_POST["idToken"]) && $_POST["idToken"] !== "null"  ? $_POST["idToken"]  : null;
 
-		$apiEntrada = array(
-			'supcod' => $_POST['supcod'],
-            'supnom' => $_POST['supnom'],
-			'idToken' => $idToken
+		$apiEntrada = 
+		array(
+			"supervisor" => array(
+				array(
+					'supcod' => $_POST['supcod'],
+					'supnom' => $_POST['supnom'],
+					'idToken' => $idToken
+				)
+			)
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'POST');
@@ -46,8 +60,13 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "excluir") {
 
-		$apiEntrada = array(
-			'id_recid' => $_POST['id_recid']
+		$apiEntrada = 
+		array(
+			"supervisor" => array(
+				array(
+					'id_recid' => $_POST['id_recid']
+				)
+			)
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/supervisor', json_encode($apiEntrada), 'DELETE');
@@ -77,8 +96,13 @@ if (isset($_GET['operacao'])) {
 
         $supcod = isset($_POST["supcod"]) && $_POST["supcod"] !== "null"  ? $_POST["supcod"]  : null;
 		
-		$apiEntrada = array(
-            'supcod' => $supcod
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'supcod' => $supcod
+				)
+			)
 		);
 		$filiais = chamaAPI(null, '/vendas/filialsupervisor', json_encode($apiEntrada), 'GET');
 

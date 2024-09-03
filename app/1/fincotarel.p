@@ -55,7 +55,7 @@ pdtfim = ttentrada.pdtfim.
 
             lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
             message string(vlcSaida).
-            //return.
+            /* return. */
         end.     
  
 def temp-table ttcotas no-undo

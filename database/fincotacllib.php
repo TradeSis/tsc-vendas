@@ -7,10 +7,15 @@ function buscaFiliais($fcccod = null, $Etbcod = null, $DtIVig = null)
 {
 	
 	$filiais = array();
-	$apiEntrada = array(
-		'fcccod' => $fcccod,
-		'Etbcod' => $Etbcod,
-		'DtIVig' => $DtIVig
+	$apiEntrada = 
+	array(
+		"dadosEntrada" => array(
+			array(
+				'fcccod' => $fcccod,
+				'Etbcod' => $Etbcod,
+				'DtIVig' => $DtIVig
+			)
+		)
 	);
 
 	$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'GET');
@@ -25,12 +30,17 @@ if (isset($_GET['operacao'])) {
 	
 		$DtFVig = isset($_POST["DtFVig"]) && $_POST["DtFVig"] !== ""  ? $_POST["DtFVig"]  : null;
 
-		$apiEntrada = array(
-			'Etbcod' => $_POST['Etbcod'],
-            'fcccod' => $_POST['fcccod'],
-			'DtFVig' => $DtFVig,
-			'CotasLib' => $_POST['CotasLib'],
-			'DtIVig' => $_POST['DtIVig']
+		$apiEntrada = 
+		array(
+			"fincotacllib" => array(
+				array(
+					'Etbcod' => $_POST['Etbcod'],
+					'fcccod' => $_POST['fcccod'],
+					'DtFVig' => $DtFVig,
+					'CotasLib' => $_POST['CotasLib'],
+					'DtIVig' => $_POST['DtIVig']
+				)
+			)
 		);
 	
 		$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'PUT');
@@ -40,13 +50,20 @@ if (isset($_GET['operacao'])) {
 	}
 
 	if ($operacao == "alterar") {
+		
+		$DtFVig = isset($_POST["DtFVig"]) && $_POST["DtFVig"] !== ""  ? $_POST["DtFVig"]  : null;
 
-		$apiEntrada = array(
-			'Etbcod' => $_POST['Etbcod'],
-            'fcccod' => $_POST['fcccod'],
-			'DtFVig' => $_POST['DtFVig'],
-			'CotasLib' => $_POST['CotasLib'],
-			'DtIVig' => $_POST['DtIVig']
+		$apiEntrada = 
+		array(
+			"fincotacllib" => array(
+				array(
+					'Etbcod' => $_POST['Etbcod'],
+					'fcccod' => $_POST['fcccod'],
+					'DtFVig' => $DtFVig,
+					'CotasLib' => $_POST['CotasLib'],
+					'DtIVig' => $_POST['DtIVig']
+				)
+			)
 		);
 	
 		$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'POST');
@@ -54,8 +71,13 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "excluir") {
 
-		$apiEntrada = array(
-			'id_recid' => $_POST['id_recid']
+		$apiEntrada = 
+		array(
+			"fincotacllib" => array(
+				array(
+					'id_recid' => $_POST['id_recid']
+				)
+			)
 		);
 	
 		$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'DELETE');
@@ -67,10 +89,15 @@ if (isset($_GET['operacao'])) {
 		$Etbcod = isset($_POST["Etbcod"]) && $_POST["Etbcod"] !== "null"  ? $_POST["Etbcod"]  : null;
 		$DtIVig = isset($_POST["DtIVig"]) && $_POST["DtIVig"] !== "null"  ? $_POST["DtIVig"]  : null;
 
-		$apiEntrada = array(
-            'fcccod' => $fcccod,
-			'Etbcod' => $Etbcod,
-			'DtIVig' => $DtIVig
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'fcccod' => $fcccod,
+					'Etbcod' => $Etbcod,
+					'DtIVig' => $DtIVig
+				)
+			)
 		);
 		$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'GET');
 
