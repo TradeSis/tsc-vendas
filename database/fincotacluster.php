@@ -7,8 +7,13 @@ function buscaCluster($fcccod = null)
 {
 	
 	$promocoes = array();
-	$apiEntrada = array(
-		'fcccod' => $fcccod
+	$apiEntrada = 
+	array(
+		"dadosEntrada" => array(
+			array(
+				'fcccod' => $fcccod
+			)
+		)
 	);
 
 	$promocoes = chamaAPI(null, '/vendas/fincotacluster', json_encode($apiEntrada), 'GET');
@@ -21,35 +26,48 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "inserir") {
 
-		$apiEntrada = array(
-			'fcccod' => $_POST['fcccod'],
-            'fccnom' => $_POST['fccnom'],
+		$apiEntrada = 
+		array(
+			"fincotacluster" => array(
+				array(
+					'fcccod' => $_POST['fcccod'],
+            		'fccnom' => $_POST['fccnom'],
+				)
+			)
 		);
 	
 		$promocoes = chamaAPI(null, '/vendas/fincotacluster', json_encode($apiEntrada), 'PUT');
-		
-
+	
 	}
 
 	if ($operacao == "alterar") {
 
-		$apiEntrada = array(
-			'fcccod' => $_POST['fcccod'],
-            'fccnom' => $_POST['fccnom'],
+		$apiEntrada = 
+		array(
+			"fincotacluster" => array(
+				array(
+					'fcccod' => $_POST['fcccod'],
+            		'fccnom' => $_POST['fccnom'],
+				)
+			)
 		);
 	
 		$promocoes = chamaAPI(null, '/vendas/fincotacluster', json_encode($apiEntrada), 'POST');
 	}
 
-
-
 	if ($operacao == "buscar") {
 
         $fcccod = isset($_POST["fcccod"]) && $_POST["fcccod"] !== "null"  ? $_POST["fcccod"]  : null;
 
-		$apiEntrada = array(
-			'fcccod' => $fcccod
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'fcccod' => $fcccod
+				)
+			)
 		);
+		
 		$promocoes = chamaAPI(null, '/vendas/fincotacluster', json_encode($apiEntrada), 'GET');
 
 		echo json_encode($promocoes);
@@ -61,8 +79,13 @@ if (isset($_GET['operacao'])) {
 		$arryArquivo = $_FILES['file']['name'];
 		$varquivo = implode(" ", $arryArquivo);
 		
-		$apiEntrada = array(
-			'varquivo' => $varquivo
+		$apiEntrada = 
+		array(
+			"carga" => array(
+				array(
+					'varquivo' => $varquivo
+				)
+			)
 		);
 
 		$carga = chamaAPI(null, '/vendas/fincotaclcarga', json_encode($apiEntrada), 'PUT');
@@ -77,11 +100,16 @@ if (isset($_GET['operacao'])) {
 		$pdtini = isset($_POST["pdtini"]) && $_POST["pdtini"] !== ""  ? $_POST["pdtini"]  : null;
 		$pdtfim = isset($_POST["pdtfim"]) && $_POST["pdtfim"] !== ""  ? $_POST["pdtfim"]  : null;
 
-		$apiEntrada = array(
-			'petbcod' => $_POST["petbcod"],
-            'pfiltraperiodo' => $pfiltraperiodo,
-			'pdtini' => $pdtini,
-            'pdtfim' => $pdtfim
+		$apiEntrada = 
+		array(
+			"fincotacluster" => array(
+				array(
+					'petbcod' => $_POST["petbcod"],
+					'pfiltraperiodo' => $pfiltraperiodo,
+					'pdtini' => $pdtini,
+					'pdtfim' => $pdtfim
+				)
+			)
 		);
 
 		$relatorio = chamaAPI(null, '/vendas/fincotarel', json_encode($apiEntrada), 'PUT');

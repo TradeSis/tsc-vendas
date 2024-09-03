@@ -7,11 +7,16 @@ function buscaSupervisor($fcccod = null, $supcod = null, $DtIVig = null)
 {
 	
 	$supervisor = array();
-	$apiEntrada = array(
-		'fcccod' => $fcccod,
-		'supcod' => $supcod,
-		'DtIVig' => $DtIVig
-	);
+	$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'fcccod' => $fcccod,
+					'supcod' => $supcod,
+					'DtIVig' => $DtIVig
+				)
+			)
+		);
 
 	$supervisor = chamaAPI(null, '/vendas/fincotasuplib', json_encode($apiEntrada), 'GET');
 	return $supervisor;
@@ -25,12 +30,17 @@ if (isset($_GET['operacao'])) {
 	
 		$DtFVig = isset($_POST["DtFVig"]) && $_POST["DtFVig"] !== ""  ? $_POST["DtFVig"]  : null;
 
-		$apiEntrada = array(
-			'supcod' => $_POST['supcod'],
-            'fcccod' => $_POST['fcccod'],
-			'DtFVig' => $DtFVig,
-			'CotasLib' => $_POST['CotasLib'],
-			'DtIVig' => $_POST['DtIVig']
+		$apiEntrada = 
+		array(
+			"fincotasuplib" => array(
+				array(
+					'supcod' => $_POST['supcod'],
+					'fcccod' => $_POST['fcccod'],
+					'DtFVig' => $DtFVig,
+					'CotasLib' => $_POST['CotasLib'],
+					'DtIVig' => $_POST['DtIVig']
+				)
+			)
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/fincotasuplib', json_encode($apiEntrada), 'PUT');
@@ -43,12 +53,17 @@ if (isset($_GET['operacao'])) {
 
 		$DtFVig = isset($_POST["DtFVig"]) && $_POST["DtFVig"] !== ""  ? $_POST["DtFVig"]  : null;
 
-		$apiEntrada = array(
-			'supcod' => $_POST['supcod'],
-            'fcccod' => $_POST['fcccod'],
-			'DtFVig' => $DtFVig,
-			'CotasLib' => $_POST['CotasLib'],
-			'DtIVig' => $_POST['DtIVig']
+		$apiEntrada = 
+		array(
+			"fincotasuplib" => array(
+				array(
+					'supcod' => $_POST['supcod'],
+					'fcccod' => $_POST['fcccod'],
+					'DtFVig' => $DtFVig,
+					'CotasLib' => $_POST['CotasLib'],
+					'DtIVig' => $_POST['DtIVig']
+				)
+			)
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/fincotasuplib', json_encode($apiEntrada), 'POST');
@@ -56,8 +71,13 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "excluir") {
 
-		$apiEntrada = array(
-			'id_recid' => $_POST['id_recid']
+		$apiEntrada = 
+		array(
+			"fincotasuplib" => array(
+				array(
+					'id_recid' => $_POST['id_recid']
+				)
+			)
 		);
 	
 		$supervisor = chamaAPI(null, '/vendas/fincotasuplib', json_encode($apiEntrada), 'DELETE');
@@ -69,10 +89,15 @@ if (isset($_GET['operacao'])) {
 		$supcod = isset($_POST["supcod"]) && $_POST["supcod"] !== "null"  ? $_POST["supcod"]  : null;
 		$DtIVig = isset($_POST["DtIVig"]) && $_POST["DtIVig"] !== "null"  ? $_POST["DtIVig"]  : null;
 
-		$apiEntrada = array(
-            'fcccod' => $fcccod,
-			'supcod' => $supcod,
-			'DtIVig' => $DtIVig
+		$apiEntrada = 
+		array(
+			"dadosEntrada" => array(
+				array(
+					'fcccod' => $fcccod,
+					'supcod' => $supcod,
+					'DtIVig' => $DtIVig
+				)
+			)
 		);
 		$supervisor = chamaAPI(null, '/vendas/fincotasuplib', json_encode($apiEntrada), 'GET');
 

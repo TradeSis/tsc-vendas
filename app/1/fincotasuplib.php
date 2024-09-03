@@ -34,7 +34,7 @@ $dados = json_decode($retorno,true);
       $dados = $dados["conteudoSaida"][0];
   } else {
     
-     if (!isset($dados["fincotasuplib"][0]) && ($jsonEntrada['supcod'] != null)) {  // Verifica se tem mais de 1 registro
+     if (!isset($dados["fincotasuplib"][0]) && ($jsonEntrada['dadosEntrada'][0]['supcod'] != null)) {  // Verifica se tem mais de 1 registro
       $dados = $dados["fincotasuplib"][0]; // Retorno sem array
     } else {
       $dados = $dados["fincotasuplib"];  

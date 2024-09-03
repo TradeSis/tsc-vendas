@@ -69,7 +69,7 @@ THEN DO:
             ttprevenda.dtfechamento = prevenda.dtfechamento.
             ttprevenda.contador     = contador.
 
-                //Clien            
+                /* Clien */            
                 find clien where clien.clicod = prevenda.clicod no-lock no-error.
                 if avail clien
                 then do:
@@ -81,7 +81,7 @@ THEN DO:
                     ttprevenda.clinom = ?.
                 end.
 
-                //Func            
+                /* Func */            
                 find func where func.etbcod = prevenda.etbcod and func.funcod = prevenda.vencod no-lock no-error.
                 if avail func
                 then do:
