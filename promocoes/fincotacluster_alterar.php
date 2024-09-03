@@ -113,7 +113,8 @@ $contrassin = "Nao";
 
     <!-- botão de modais que ficam escondidos -->
     <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomEstabModal" id="abreEstabModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
-    <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomPlanosModal" id="abrePlanosModal"><i class="bi bi-plus-square"></i>&nbsp NovoX</button>
+    <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomPlanosModal" id="abrePlanosModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
+    <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomSupervisorModal" id="abreSupervisorModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
 
   
     <!--------- EXCLUIR FILIAIS --------->
@@ -216,10 +217,15 @@ $contrassin = "Nao";
                 <div class="modal-body pt-0">
                     <form method="post" id="inserirSupervisorForm">
                         <div class="row mt-2">
-                            <div class="col">
-                                <label class="form-label ts-label">Cod</label>
-                                <input type="text" class="form-control ts-input" name="supcod" required>
+                            <label class="form-label ts-label" style="margin-bottom: -17px;">Cod</label>
+                            <div class="col input-group mb-3 mt-3" style="margin-top: 50px;">
+                                <input type="text" class="form-control ts-inputcomBtn mt-1" name="supcod" id="insSup_supcod">
                                 <input type="hidden" class="form-control ts-input" name="fcccod" value="<?php echo $cluster['fcccod'] ?>">
+                                <button class="btn btn-outline-secondary ts-acionaZoomSupervisor" type="button" title="Pesquisar Supervisor"><i class="bi bi-search"></i></button>
+                            </div>
+                            <div class="col">
+                                <label class="form-label ts-label">Nome</label>
+                                <input type="text" class="form-control ts-input" name="supnom" id="insSup_supnom" disabled>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -233,7 +239,7 @@ $contrassin = "Nao";
                             </div>
                             <div class="col">
                                 <label class="form-label ts-label">Cotas Liberadas</label>
-                                <input type="text" class="form-control ts-input" name="CotasLib" required>
+                                <input type="text" class="form-control ts-input" name="CotasLib" id="insSup_CotasLib" required>
                             </div>
                         </div>
                 </div><!--body-->
@@ -611,6 +617,22 @@ $contrassin = "Nao";
             $('#zoomPlanosModal').modal('hide');
         });
 
+        // AÇÂO DE CLICK MODAL SUPERVISOR
+        $(document).on('click', '.ts-acionaZoomSupervisor', function() {
+            const elemento = document.getElementById('abreSupervisorModal');
+            elemento.click()
+        });
+
+        $(document).on('click', '.ts-clickSupervisor', function() {
+            var supcod = $(this).attr("data-supcod");
+            var supnom = $(this).attr("data-supnom");
+
+            $('#insSup_supcod').val(supcod);
+            $('#insSup_supnom').val(supnom);
+
+            $('#zoomSupervisorModal').modal('hide');
+        });
+
 
         $("#alterarClusterForm").submit(function(event) {
             event.preventDefault();
@@ -675,6 +697,7 @@ $contrassin = "Nao";
                     } else {
                         $('#inserirPlanosModal').modal('hide');
                         $('#insPlan_fincod').val('');
+                        $('#insPlan_finnom').val('');
                         const elemento = document.getElementById('tab-planos');
                         elemento.click();
                     }
@@ -719,7 +742,9 @@ $contrassin = "Nao";
                         alert(json['descricaoStatus'])
                     } else {
                         $('#inserirSupervisorModal').modal('hide');
-                        //$('#insSupervisor_fincod').val('');
+                        $('#insSup_supcod').val('');
+                        $('#insSup_supnom').val('');
+                        $('#insSup_CotasLib').val('');
                         const elemento = document.getElementById('tab-supervisor');
                         elemento.click();
                     }
