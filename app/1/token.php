@@ -34,7 +34,7 @@ $dados = json_decode($retorno,true);
       $dados = $dados["conteudoSaida"][0];
   } else {
     
-     if (!isset($dados["token"][0]) && ($jsonEntrada['idToken'] != null)) {  // Verifica se tem mais de 1 registro
+     if (!isset($dados["token"][0]) && ($jsonEntrada['dadosEntrada'][0]['idToken'] != null)) {  // Verifica se tem mais de 1 registro
       $dados = $dados["token"][0]; // Retorno sem array
     } else {
       $dados = $dados["token"];  
