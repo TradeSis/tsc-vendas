@@ -7,8 +7,13 @@ function buscaToken($idUsuario = null)
 {
 
         $usuario = array();
-        $apiEntrada = array(
-                'idToken' => $idUsuario
+        $apiEntrada =
+        array(
+                "dadosEntrada" => array(
+                        array(
+                                'idToken' => $idUsuario
+                        )
+                )
         );
         $usuario = chamaAPI(null, '/vendas/token', json_encode($apiEntrada), 'GET');
 
@@ -19,11 +24,16 @@ function verificaToken($idToken, $vtoken)
 {
 
         $usuario = array();
-      
-        $apiEntrada = array(
-                'idToken' => $idToken,
-                'token' => $vtoken
+        $apiEntrada =
+        array(
+                "dadosEntrada" => array(
+                        array(
+                                'idToken' => $idToken,
+                                'token' => $vtoken
+                        )
+                )
         );
+      
         $usuario = chamaAPI(null, '/vendas/token/verifica', json_encode($apiEntrada), 'POST');
 
         if (isset($usuario['usuario'])) {
@@ -39,22 +49,37 @@ if (isset($_GET['operacao'])) {
         $operacao = $_GET['operacao'];
 
         if ($operacao == "inserir") {
-                $apiEntrada = array(
-                        'idToken' => $_POST['idToken']
+                $apiEntrada =
+                array(
+                        "token" => array(
+                                array(
+                                        'idToken' => $_POST['idToken']
+                                )
+                        )
                 );
                 $usuario = chamaAPI(null, '/vendas/token', json_encode($apiEntrada), 'PUT');
         }
 
         if ($operacao == "excluir") {
-                $apiEntrada = array(
-                        'id_recid' => $_POST['id_recid']
+                $apiEntrada =
+                array(
+                        "token" => array(
+                                array(
+                                        'id_recid' => $_POST['id_recid']
+                                )
+                        )
                 );
                 $usuario = chamaAPI(null, '/vendas/token', json_encode($apiEntrada), 'DELETE');
         }
         if ($operacao == "ativar") {
-                $apiEntrada = array(
-                        'idToken' => $_POST['idToken'],
-                        'secret' => $_POST['secret']
+                $apiEntrada =
+                array(
+                        "token" => array(
+                                array(
+                                        'idToken' => $_POST['idToken'],
+                                        'secret' => $_POST['secret']
+                                )
+                        )
                 );
                 $usuario = chamaAPI(null, '/vendas/token/ativar', json_encode($apiEntrada), 'POST');
         }
@@ -62,14 +87,19 @@ if (isset($_GET['operacao'])) {
 
                 $idToken = isset($_POST["idToken"]) && $_POST["idToken"] !== "null"  ? $_POST["idToken"]  : null;
 
-                $apiEntrada = array(
-                        'idToken' => $idToken
+                $apiEntrada =
+                array(
+                        "dadosEntrada" => array(
+                                array(
+                                        'idToken' => $idToken
+                                )
+                        )
                 );
                 $usuario = chamaAPI(null, '/vendas/token', json_encode($apiEntrada), 'GET');
 
                 echo json_encode($usuario);
                 return $usuario;
         }
-      
+
         header('Location: ../apoio/token.php');
 }

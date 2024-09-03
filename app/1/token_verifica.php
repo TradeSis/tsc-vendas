@@ -42,7 +42,7 @@ if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
   $rows = 0;
   $secret = $dados["token"][0]["secret"];
   $dados = $dados["token"];
-  $token = $jsonEntrada["token"];
+  $token = $jsonEntrada['dadosEntrada'][0]["token"];
 
 
   if ($google2fa->verifyKey($secret, $token)) {
