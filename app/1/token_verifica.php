@@ -9,7 +9,7 @@ if (isset($LOG_CAMINHO)) {
   $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "verificatoken";
   if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 1) {
-      $arquivo = fopen(defineCaminhoLog() . "vendas_VERIFICA" . date("dmY") . ".log", "a");
+      $arquivo = fopen(defineCaminhoLog() . "vendas_verificatoken" . date("dmY") . ".log", "a");
     }
   }
 }
@@ -33,7 +33,7 @@ $dadosretorno = json_decode($retorno, true);
 $rowretorno['idToken'] = $dadosretorno["token"][0]["idToken"];
 $retornoFormat = array("token" => $rowretorno);
 fwrite($arquivo, $identificacao . "-RETORNO->" . json_encode($retornoFormat) . "\n");
-
+$usuarios = array();
 
 $dados = json_decode($retorno, true);
 if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
@@ -43,7 +43,7 @@ if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
   $secret = $dados["token"][0]["secret"];
   $dados = $dados["token"];
   $token = $jsonEntrada['dadosEntrada'][0]["token"];
-
+  $row["idToken"] = $jsonEntrada['dadosEntrada'][0]["idToken"];
 
   if ($google2fa->verifyKey($secret, $token)) {
     $row['senhaCorreta'] = true;
@@ -51,9 +51,11 @@ if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
     $row['senhaCorreta'] = false;
   }
 
-  //array_push($dados, $row);
+  array_push($usuarios, $row);
   //fwrite($arquivo, $identificacao . "-RETORNO DADOS->" . $dados[1] . "\n");
-  $jsonSaida = array("usuarios" => $row);
+  $jsonSaida = array("usuarios" => $usuarios);
+  fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n\n");
+
 }
 
 
