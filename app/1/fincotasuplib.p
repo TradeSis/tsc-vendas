@@ -15,6 +15,7 @@ def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA
 def temp-table ttfincotasuplib  no-undo serialize-name "fincotasuplib"  /* JSON SAIDA */
     like fincotasuplib
     FIELD supnom LIKE supervisor.supnom
+    FIELD cotasuso      AS INT
     FIELD id_recid      AS INT64.    
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
@@ -23,7 +24,7 @@ def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CA
 
 def VAR vfcccod like ttentrada.fcccod.
 def VAR vsupnom AS CHAR.
-
+def var vcotasuso like fincotasup.cotasuso.
 
 hEntrada = temp-table ttentrada:HANDLE.
 lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
@@ -88,7 +89,25 @@ return string(vlcSaida).
 
 PROCEDURE criaCotasSupervisor.
      FIND supervisor WHERE supervisor.supcod =  fincotasuplib.supcod NO-LOCK .
-        
+     
+     FIND fincotacluster WHERE fincotacluster.fcccod = fincotasuplib.fcccod NO-LOCK.
+     find fincotacluster of fincotasuplib no-lock.    
+     
+        vcotasuso = 0.
+        for each estab of supervisor no-lock.
+            for each fincotaclplan of fincotacluster no-lock.
+                for each fincotasup where 
+                    fincotasup.supcod = fincotasuplib.supcod and
+                    fincotasup.etbcod = estab.etbcod and
+                    fincotasup.fincod = fincotaclplan.fincod and
+                    fincotasup.dtivig = fincotasuplib.dtivig and
+                    fincotasup.dtfvig = fincotasuplib.dtfvig 
+                    no-lock.
+                    vcotasuso = vcotasuso + fincotasup.cotasuso.
+                end.
+            end.
+        end.
+
         create ttfincotasuplib.
         ttfincotasuplib.supcod = fincotasuplib.supcod.
         ttfincotasuplib.fcccod = fincotasuplib.fcccod.
@@ -96,6 +115,7 @@ PROCEDURE criaCotasSupervisor.
         ttfincotasuplib.CotasLib = fincotasuplib.CotasLib.
         ttfincotasuplib.DtIVig = fincotasuplib.DtIVig.
         ttfincotasuplib.supnom = supervisor.supnom.
+        ttfincotasuplib.cotasuso = vcotasuso.
 
         ttfincotasuplib.id_recid = RECID(fincotasuplib).
 END.
