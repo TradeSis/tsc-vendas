@@ -304,6 +304,7 @@ $contrassin = "Nao";
                                 <th>Final</th>
                                 <th>Lib</th>
                                 <th>Uso</th>
+                                <th>Saldo</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -351,6 +352,7 @@ $contrassin = "Nao";
                                 <th>Final</th>
                                 <th>Lib</th>
                                 <th>Uso</th>
+                                <th>Saldo</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -447,6 +449,7 @@ $contrassin = "Nao";
                     linha = linha + "<td>" + formatDate(object.DtFVig) + "</td>";
                     linha = linha + "<td>" + object.CotasLib + "</td>";
                     linha = linha + "<td>" + object.cotasuso + "</td>";
+                    linha = linha + "<td>" + object.saldo + "</td>";
 
                     linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm' href='fincotacllib_alterar.php?fcccod=" + object.fcccod + "&Etbcod=" + object.Etbcod + "&DtIVig=" + object.DtIVig + "&id_recid=" + object.id_recid + "' role='button'><i class='bi bi-pencil-square'></i></a> ";
 
@@ -529,6 +532,7 @@ $contrassin = "Nao";
                         linha = linha + "<td>" + formatDate(object.DtFVig) + "</td>";
                         linha = linha + "<td>" + object.CotasLib + "</td>";
                         linha = linha + "<td>" + object.cotasuso + "</td>";
+                        linha = linha + "<td>" + object.saldo + "</td>";
 
                         linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm' id='btnteste' href='fincotasuplib_alterar.php?fcccod=" + object.fcccod + "&supcod=" + object.supcod + "&DtIVig=" + object.DtIVig + "&id_recid=" + object.id_recid + "' role='button'><i class='bi bi-pencil-square'></i></a> ";
 
