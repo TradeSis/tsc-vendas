@@ -41,6 +41,7 @@ then do:
         create ttsupervisor.
         ttsupervisor.supcod    = supervisor.supcod.
         ttsupervisor.supnom    = supervisor.supnom.
+        ttsupervisor.idToken   = supervisor.idToken.
         ttsupervisor.id_recid = recid(supervisor).
     end.
 end. 
@@ -55,6 +56,7 @@ ELSE DO:
             create ttsupervisor.
             ttsupervisor.supcod    = supervisor.supcod.
             ttsupervisor.supnom    = supervisor.supnom.
+            ttsupervisor.idToken   = supervisor.idToken.
             ttsupervisor.id_recid = recid(supervisor).
         
         end.
@@ -62,6 +64,7 @@ ELSE DO:
             create ttsupervisor.
                 ttsupervisor.supcod    = supervisor.supcod.
                 ttsupervisor.supnom    = supervisor.supnom.
+                ttsupervisor.idToken   = supervisor.idToken.
                 ttsupervisor.id_recid = recid(supervisor).
         end.    
     end.
