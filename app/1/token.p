@@ -22,22 +22,9 @@ hEntrada = temp-table ttentrada:HANDLE.
 lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
 
 find first ttentrada no-error.
-if not avail ttentrada
-then do:
-    create ttsaida.
-    ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Dados de Entrada nao encontrados".
-
-    hsaida  = temp-table ttsaida:handle.
-
-    lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
-    message string(vlcSaida).
-    return.
-end.
-
 
 FOR EACH token WHERE
-    (IF ttentrada.idToken = ?
+    (IF (ttentrada.idToken = ? or not avail ttentrada)
     THEN TRUE 
     else token.idToken = ttentrada.idToken)
     no-lock.
