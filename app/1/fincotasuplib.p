@@ -16,6 +16,7 @@ def temp-table ttfincotasuplib  no-undo serialize-name "fincotasuplib"  /* JSON 
     like fincotasuplib
     FIELD supnom LIKE supervisor.supnom
     FIELD cotasuso      AS INT
+    FIELD saldo      AS INT
     FIELD id_recid      AS INT64.    
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
@@ -89,7 +90,7 @@ return string(vlcSaida).
 
 PROCEDURE criaCotasSupervisor.
      FIND supervisor WHERE supervisor.supcod =  fincotasuplib.supcod NO-LOCK .
-     
+
      FIND fincotacluster WHERE fincotacluster.fcccod = fincotasuplib.fcccod NO-LOCK.
      find fincotacluster of fincotasuplib no-lock.    
      
@@ -116,6 +117,7 @@ PROCEDURE criaCotasSupervisor.
         ttfincotasuplib.DtIVig = fincotasuplib.DtIVig.
         ttfincotasuplib.supnom = supervisor.supnom.
         ttfincotasuplib.cotasuso = vcotasuso.
+        ttfincotasuplib.saldo = fincotasuplib.CotasLib - vcotasuso.
 
         ttfincotasuplib.id_recid = RECID(fincotasuplib).
 END.
