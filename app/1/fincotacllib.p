@@ -16,6 +16,7 @@ def temp-table ttfincotacllib  no-undo serialize-name "fincotacllib"  /* JSON SA
     like fincotacllib
     FIELD munic         LIKE estab.munic
     FIELD cotasuso      AS INT
+    FIELD saldo      AS INT
     FIELD id_recid      AS INT64.    
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
@@ -100,7 +101,7 @@ PROCEDURE criaCotasFiliais.
                     vcotasuso = vcotasuso + fincotaetb.cotasuso.
                 end.
             end.
-     
+        
         create ttfincotacllib.
         ttfincotacllib.Etbcod = fincotacllib.Etbcod.
         ttfincotacllib.fcccod = fincotacllib.fcccod.
@@ -109,6 +110,7 @@ PROCEDURE criaCotasFiliais.
         ttfincotacllib.DtIVig = fincotacllib.DtIVig.
         ttfincotacllib.munic = estab.munic.
         ttfincotacllib.cotasuso = vcotasuso.
+        ttfincotacllib.saldo = fincotacllib.CotasLib - vcotasuso.
 
         ttfincotacllib.id_recid = RECID(fincotacllib).
 
