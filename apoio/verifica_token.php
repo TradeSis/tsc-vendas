@@ -12,9 +12,8 @@ if ($token === "") {
 }
                        
 $usuarios = verificaToken($user, $token);
-
-if (isset($usuarios["usuarios"]['senhaCorreta'])) {
-    if ($usuarios["usuarios"]['senhaCorreta'] == false) {
+if (isset($usuarios['senhaCorreta'])) {
+    if ($usuarios['senhaCorreta'] == false) {
         
         $mensagem = "Token incorreto!";
         header('Location: ../apoio/token.php?&mensagem=' . urlencode($mensagem));
