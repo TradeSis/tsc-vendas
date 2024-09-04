@@ -10,8 +10,8 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idToken like token.idToken.
 
-def temp-table tttoken  no-undo serialize-name "token"  /* JSON SAIDA */
-    like token
+def temp-table tttoken  no-undo serialize-name "usuarios"  /* JSON SAIDA */
+    field idToken       as char 
     FIELD id_recid      AS INT64.    
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
@@ -24,7 +24,7 @@ lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
 find first ttentrada no-error.
 
 FOR EACH token WHERE
-    (IF (ttentrada.idToken = ? or not avail ttentrada)
+    (IF (avail ttentrada and ttentrada.idToken = ?) or not avail ttentrada
     THEN TRUE 
     else token.idToken = ttentrada.idToken)
     no-lock.

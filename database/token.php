@@ -36,8 +36,8 @@ function verificaToken($idToken, $vtoken)
       
         $usuario = chamaAPI(null, '/vendas/token/verifica', json_encode($apiEntrada), 'POST');
 
-        if (isset($usuario['usuario'])) {
-                return $usuario["usuario"][0];
+        if (isset($usuario['usuarios'])) {
+                return $usuario["usuarios"][0];
         } else {
                 return $usuario;
         }
@@ -97,7 +97,7 @@ if (isset($_GET['operacao'])) {
                 );
                 $usuario = chamaAPI(null, '/vendas/token', json_encode($apiEntrada), 'GET');
 
-                echo json_encode($usuario);
+                echo json_encode($usuario["usuarios"]);
                 return $usuario;
         }
 
