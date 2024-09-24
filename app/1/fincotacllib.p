@@ -10,7 +10,9 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field fcccod like fincotacllib.fcccod
     field Etbcod like fincotacllib.Etbcod
-    field DtIVig like fincotacllib.DtIVig.
+    field DtIVigInicio like fincotacllib.DtIVig
+    field DtIVigFinal like fincotacllib.DtIVig
+    field id_recid as int64.
 
 def temp-table ttfincotacllib  no-undo serialize-name "fincotacllib"  /* JSON SAIDA */
     like fincotacllib
@@ -42,24 +44,22 @@ then do:
     return.
 end.
 
-IF ttentrada.fcccod <> ? AND ttentrada.Etbcod = ? AND ttentrada.DtIVig = ?
-THEN DO:
-    FOR EACH fincotacllib WHERE fincotacllib.fcccod = ttentrada.fcccod and
-                fincotacllib.dtivig <= today and
-               (fincotacllib.dtfvig >= today or fincotacllib.dtfvig = ?)
-                NO-LOCK:
-        RUN criaCotasFiliais.
-    END.
-END.
+if ttentrada.id_recid <> 0
+then do:
+    find fincotacllib where recid(fincotacllib) = ttentrada.id_recid no-lock.
+    RUN criaCotasFiliais.
+end.
+ELSE DO:
 
-IF ttentrada.fcccod <> ? AND ttentrada.Etbcod <> ? AND ttentrada.DtIVig <> ?
-THEN DO:
     FOR EACH fincotacllib WHERE fincotacllib.fcccod = ttentrada.fcccod AND
-                                fincotacllib.Etbcod = ttentrada.Etbcod AND
-                                fincotacllib.DtIVig = ttentrada.DtIVig
+                                (if ttentrada.Etbcod <> ? then fincotacllib.Etbcod = ttentrada.Etbcod else TRUE) AND
+                                fincotacllib.dtivig >= ttentrada.DtIVigInicio AND
+                                fincotacllib.dtivig <= ttentrada.DtIVigFinal AND
+                                (fincotacllib.dtfvig >= today or fincotacllib.dtfvig = ?)
                                 NO-LOCK:
         RUN criaCotasFiliais.
     END.
+    
 END.
 
 
@@ -115,5 +115,3 @@ PROCEDURE criaCotasFiliais.
         ttfincotacllib.id_recid = RECID(fincotacllib).
 
 END.
-
-

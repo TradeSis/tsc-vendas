@@ -5,11 +5,10 @@ include_once('../database/fincotacllib.php');
 include_once('../database/fincotacluster.php');
 
 $fcccod = $_GET['fcccod'];
-$Etbcod = $_GET['Etbcod'];
-$DtIVig = $_GET['DtIVig'];
 $id_recid = $_GET['id_recid'];
 
-$filial = buscaFiliais($fcccod, $Etbcod, $DtIVig);
+$filial = buscaFilial($id_recid);
+
 $cluster = buscaCluster($fcccod);
 
 $motanomeFilial = 'Filial' . " " . $cluster['fcccod'] . " " . $cluster['fccnom'];
@@ -156,7 +155,7 @@ $motanomeFilial = 'Filial' . " " . $cluster['fcccod'] . " " . $cluster['fccnom']
     <?php include_once ROOT . "/vendor/footer_js.php"; ?>
     <?php //include 'modalAlterarSenha.php'; 
     ?>
-    <?php include 'zoomEstab.php'; ?>
+    <?php //include 'zoomEstab.php'; ?>
     <script>
         // TABELA UTILIZACAO
         $.ajax({

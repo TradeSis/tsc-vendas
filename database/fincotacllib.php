@@ -22,6 +22,23 @@ function buscaFiliais($fcccod = null, $Etbcod = null, $DtIVig = null)
 	return $filiais;
 }
 
+function buscaFilial($id_recid = null)
+{
+	
+	$filiais = array();
+	$apiEntrada = 
+	array(
+		"dadosEntrada" => array(
+			array(
+				'id_recid' => $id_recid
+			)
+		)
+	);
+
+	$filiais = chamaAPI(null, '/vendas/fincotacllib', json_encode($apiEntrada), 'GET');
+	return $filiais;
+}
+
 if (isset($_GET['operacao'])) {
 
 	$operacao = $_GET['operacao'];
@@ -86,8 +103,9 @@ if (isset($_GET['operacao'])) {
 	if ($operacao == "buscar") {
 
         $fcccod = isset($_POST["fcccod"]) && $_POST["fcccod"] !== "null"  ? $_POST["fcccod"]  : null;
-		$Etbcod = isset($_POST["Etbcod"]) && $_POST["Etbcod"] !== "null"  ? $_POST["Etbcod"]  : null;
-		$DtIVig = isset($_POST["DtIVig"]) && $_POST["DtIVig"] !== "null"  ? $_POST["DtIVig"]  : null;
+		$Etbcod = isset($_POST["Etbcod"]) && $_POST["Etbcod"] !== "null" && $_POST["Etbcod"] !== ""  ? $_POST["Etbcod"]  : null;
+		$DtIVigInicio = isset($_POST["DtIVigInicio"]) && $_POST["DtIVigInicio"] !== "null"  ? $_POST["DtIVigInicio"]  : null;
+		$DtIVigFinal = isset($_POST["DtIVigFinal"]) && $_POST["DtIVigFinal"] !== "null"  ? $_POST["DtIVigFinal"]  : null;
 
 		$apiEntrada = 
 		array(
@@ -95,7 +113,8 @@ if (isset($_GET['operacao'])) {
 				array(
 					'fcccod' => $fcccod,
 					'Etbcod' => $Etbcod,
-					'DtIVig' => $DtIVig
+					'DtIVigInicio' => $DtIVigInicio,
+					'DtIVigFinal' => $DtIVigFinal
 				)
 			)
 		);
