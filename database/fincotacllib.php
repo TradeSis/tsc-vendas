@@ -104,17 +104,14 @@ if (isset($_GET['operacao'])) {
 
         $fcccod = isset($_POST["fcccod"]) && $_POST["fcccod"] !== "null"  ? $_POST["fcccod"]  : null;
 		$Etbcod = isset($_POST["Etbcod"]) && $_POST["Etbcod"] !== "null" && $_POST["Etbcod"] !== ""  ? $_POST["Etbcod"]  : null;
-		$DtIVigInicio = isset($_POST["DtIVigInicio"]) && $_POST["DtIVigInicio"] !== "null"  ? $_POST["DtIVigInicio"]  : null;
-		$DtIVigFinal = isset($_POST["DtIVigFinal"]) && $_POST["DtIVigFinal"] !== "null"  ? $_POST["DtIVigFinal"]  : null;
-
+		
 		$apiEntrada = 
 		array(
 			"dadosEntrada" => array(
 				array(
 					'fcccod' => $fcccod,
 					'Etbcod' => $Etbcod,
-					'DtIVigInicio' => $DtIVigInicio,
-					'DtIVigFinal' => $DtIVigFinal
+					'ativos' => $_POST["ativos"]
 				)
 			)
 		);

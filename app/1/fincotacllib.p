@@ -10,8 +10,7 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field fcccod like fincotacllib.fcccod
     field Etbcod like fincotacllib.Etbcod
-    field DtIVigInicio like fincotacllib.DtIVig
-    field DtIVigFinal like fincotacllib.DtIVig
+    field ativos AS LOG
     field id_recid as int64.
 
 def temp-table ttfincotacllib  no-undo serialize-name "fincotacllib"  /* JSON SAIDA */
@@ -53,11 +52,10 @@ ELSE DO:
 
     FOR EACH fincotacllib WHERE fincotacllib.fcccod = ttentrada.fcccod AND
                                 (if ttentrada.Etbcod <> ? then fincotacllib.Etbcod = ttentrada.Etbcod else TRUE) AND
-                                fincotacllib.dtivig >= ttentrada.DtIVigInicio AND
-                                fincotacllib.dtivig <= ttentrada.DtIVigFinal AND
-                                (fincotacllib.dtfvig >= today or fincotacllib.dtfvig = ?)
+                                (IF ttentrada.ativos = no then true else fincotacllib.dtivig <= today and (fincotacllib.dtfvig = ? or fincotacllib.dtfvig >= today))
                                 NO-LOCK:
         RUN criaCotasFiliais.
+          
     END.
     
 END.

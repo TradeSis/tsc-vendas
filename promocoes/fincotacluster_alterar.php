@@ -301,11 +301,19 @@ $contrassin = "Nao";
                         <button class="btn btn-outline-secondary filtrarZoomEstab" type="button" title="Pesquisar Filial"><i class="bi bi-search"></i></button>
                     </div>
                     <div class="col-4 d-flex">
-                        <input type="date" class="form-control ts-input" name="DtIVigInicio" id="DtIVigInicio" required>
-                        <p class="mx-2">até</p>
-                        <input type="date" class="form-control ts-input" name="DtIVigFinal" id="DtIVigFinal" required>
+                        <div class="gap-2 pt-2">
+                            <input class="form-check-input" type="radio" name="buscaAtivos" id="buscaAtivo" checked>
+                            <label class="form-check-label" for="buscaAtivo">
+                                Ativos
+                            </label>
 
-                        <button type="submit" class="btn btn-sm btn-primary ms-2" id="filtrardata">Filtrar</button>
+                            <input class="form-check-input" type="radio" name="buscaAtivos" id="buscaTodos">
+                            <label class="form-check-label" for="buscaTodos">
+                                Todos
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-sm btn-primary ms-2" id="filtrarEntrada">Filtrar</button>
                         <button type="submit" class="btn btn-sm btn-info ms-2" onclick="limpar()">Limpar</button>
                     </div>
 
@@ -388,8 +396,7 @@ $contrassin = "Nao";
 
     <!-- MODAIS DE ZOOM -->
     <?php include ROOT . '/cadastros/zoom/estab.php'; ?>
-    <?php include ROOT . '/crediario/zoom/finan.php'; 
-    ?>
+    <?php include ROOT . '/crediario/zoom/finan.php'; ?>
     <?php include ROOT . '/vendas/zoom/supervisor.php'; ?>
 
     <!-- LOCAL PARA COLOCAR OS JS -->
@@ -443,41 +450,18 @@ $contrassin = "Nao";
             }
         }
 
-        // Ao iniciar o programa, inseri a data atual no input e chama funcao buscarFiliais
-        $(document).ready(function() {
-            var data = new Date(),
-                dia = data.getDate().toString(),
-                diaF = (dia.length == 1) ? '0' + dia : dia,
-                mes = (data.getMonth() + 1).toString(),
-                mesF = (mes.length == 1) ? '0' + mes : mes,
-                anoF = data.getFullYear();
-            dataAtual = anoF + "-" + mesF + "-" + diaF;
-            primeirodiadomes = anoF + "-" + mesF + "-" + "01";
-
-            const DtIVig = document.getElementById("inserir_DtIVig");
-            DtIVig.value = dataAtual;
-
-            const DtIVig_Supervisor = document.getElementById("inserir_DtIVig_Supervisor");
-            DtIVig_Supervisor.value = dataAtual;
-
-            //Filtro tabela Filiais
-            const DtIVigInicio = document.getElementById("DtIVigInicio");
-            DtIVigInicio.value = primeirodiadomes;
-
-            const DtIVigFinal = document.getElementById("DtIVigFinal");
-            DtIVigFinal.value = dataAtual;
-
-            buscarFiliais(null, $("#DtIVigInicio").val(), $("#DtIVigFinal").val());
-        });
-
         function limpar() {
-            buscarFiliais(null, primeirodiadomes, dataAtual);
+            buscarFiliais(null, true);
             $('#filtrarEtbcod').val("");
-            $('#DtIVigInicio').val(primeirodiadomes);
-            $('#DtIVigFinal').val(dataAtual);
+            $("#buscaAtivo").prop('checked', true);
         }
 
-        function buscarFiliais(Etbcod, DtIVigInicio, DtIVigFinal) {
+        $(document).ready(function() {
+            $("#buscaAtivo").prop('checked', true);
+            buscarFiliais(null, $("#buscaAtivo").is(':checked'));
+        });
+        
+        function buscarFiliais(Etbcod, ativos) {
             // TABELA FILIAL
             $.ajax({
                 type: 'POST',
@@ -489,8 +473,7 @@ $contrassin = "Nao";
                 data: {
                     fcccod: '<?php echo $fcccod ?>',
                     Etbcod: Etbcod,
-                    DtIVigInicio: DtIVigInicio,
-                    DtIVigFinal: DtIVigFinal
+                    ativos: ativos
                 },
                 success: function(msg) {
                     var json = JSON.parse(msg);
@@ -524,8 +507,9 @@ $contrassin = "Nao";
             });
         }
 
-        $("#filtrardata").click(function() {
-            buscarFiliais($("#filtrarEtbcod").val(), $("#DtIVigInicio").val(), $("#DtIVigFinal").val());
+        $("#filtrarEntrada").click(function() {
+            var ativos = $("#buscaAtivo").is(':checked') == true ? true : false
+            buscarFiliais($("#filtrarEtbcod").val(), ativos);
         });
 
         function buscaPlanos() {
@@ -854,6 +838,24 @@ $contrassin = "Nao";
             window.location.reload();
         }
 
+        // Ao iniciar o programa, inseri a data atual no input e chama funcao buscarFiliais
+        $(document).ready(function() {
+            var data = new Date(),
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(),
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            dataAtual = anoF + "-" + mesF + "-" + diaF;
+            primeirodiadomes = anoF + "-" + mesF + "-" + "01";
+
+            const DtIVig = document.getElementById("inserir_DtIVig");
+            DtIVig.value = dataAtual;
+
+            const DtIVig_Supervisor = document.getElementById("inserir_DtIVig_Supervisor");
+            DtIVig_Supervisor.value = dataAtual;
+
+        });
 
         function formatDate(dateString) {
             if (dateString !== null && !isNaN(new Date(dateString))) {
