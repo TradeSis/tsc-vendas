@@ -32,9 +32,11 @@ $contrassin = "Nao";
         <div class="row mt-2"> <!-- LINHA SUPERIOR A TABLE -->
             <div class="col-7 d-flex">
                 <!-- TITULO -->
-                <a href="fincotacluster.php" style="text-decoration: none;"><h6 class="ts-tituloSecundaria">Cluster de Planos</h6></a> &nbsp; / &nbsp;
+                <a href="fincotacluster.php" style="text-decoration: none;">
+                    <h6 class="ts-tituloSecundaria">Cluster de Planos</h6>
+                </a> &nbsp; / &nbsp;
                 <h2 class="ts-tituloPrincipal">Alterar Cluster</h2>
-                
+
             </div>
             <div class="col-3">
                 <!-- FILTROS -->
@@ -116,7 +118,7 @@ $contrassin = "Nao";
     <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomPlanosModal" id="abrePlanosModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
     <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomSupervisorModal" id="abreSupervisorModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
 
-  
+
     <!--------- EXCLUIR FILIAIS --------->
     <div class="modal" id="excluirFiliaisModal" tabindex="-1" aria-labelledby="excluirFiliaisModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -291,10 +293,36 @@ $contrassin = "Nao";
             <div class="line"></div>
 
             <div class="tabContent">
-                <div class="table ts-divTabela60">
-                    <div class="text-end mb-1">
+
+
+                <div class="row">
+                    <div class="col-2 d-flex">
+                        <input type="text" class="form-control ts-inputcomBtn mt-1 border-end" name="Etbcod" id="filtrarEtbcod" placeholder="Buscar Filial">
+                        <button class="btn btn-outline-secondary filtrarZoomEstab" type="button" title="Pesquisar Filial"><i class="bi bi-search"></i></button>
+                    </div>
+                    <div class="col-4 d-flex">
+                        <div class="gap-2 pt-2">
+                            <input class="form-check-input" type="radio" name="buscaAtivos" id="buscaAtivo" checked>
+                            <label class="form-check-label" for="buscaAtivo">
+                                Ativos
+                            </label>
+
+                            <input class="form-check-input" type="radio" name="buscaAtivos" id="buscaTodos">
+                            <label class="form-check-label" for="buscaTodos">
+                                Todos
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-sm btn-primary ms-2" id="filtrarEntrada">Filtrar</button>
+                        <button type="submit" class="btn btn-sm btn-info ms-2" onclick="limpar()">Limpar</button>
+                    </div>
+
+                    <div class="col text-end">
                         <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#inserirFiliaisModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
                     </div>
+                </div>
+
+                <div class="table ts-divTabela60 mt-1">
                     <table class="table table-sm table-hover">
                         <thead class="ts-headertabelafixo">
                             <tr class="ts-headerTabelaLinhaCima">
@@ -422,47 +450,66 @@ $contrassin = "Nao";
             }
         }
 
-        // TABELA FILIAL
-        $.ajax({
-            type: 'POST',
-            dataType: 'html',
-            url: '../database/fincotacllib.php?operacao=buscar',
-            beforeSend: function() {
-                $("#dadosFiliais").html("Carregando...");
-            },
-            data: {
-                fcccod: '<?php echo $fcccod ?>'
-            },
-            success: function(msg) {
-                //alert(msg);
-                var json = JSON.parse(msg);
+        function limpar() {
+            buscarFiliais(null, true);
+            $('#filtrarEtbcod').val("");
+            $("#buscaAtivo").prop('checked', true);
+        }
 
-                var linha = "";
-                for (var $i = 0; $i < json.length; $i++) {
-                    var object = json[$i];
+        $(document).ready(function() {
+            $("#buscaAtivo").prop('checked', true);
+            buscarFiliais(null, $("#buscaAtivo").is(':checked'));
+        });
+        
+        function buscarFiliais(Etbcod, ativos) {
+            // TABELA FILIAL
+            $.ajax({
+                type: 'POST',
+                dataType: 'html',
+                url: '../database/fincotacllib.php?operacao=buscar',
+                beforeSend: function() {
+                    $("#dadosFiliais").html("Carregando...");
+                },
+                data: {
+                    fcccod: '<?php echo $fcccod ?>',
+                    Etbcod: Etbcod,
+                    ativos: ativos
+                },
+                success: function(msg) {
+                    var json = JSON.parse(msg);
 
-                    linha = linha + "<tr>";
+                    var linha = "";
+                    for (var $i = 0; $i < json.length; $i++) {
+                        var object = json[$i];
 
-                    linha = linha + "<td>" + object.Etbcod + "</td>";
-                    linha = linha + "<td>" + object.munic + "</td>";
-                    linha = linha + "<td>" + formatDate(object.DtIVig) + "</td>";
-                    linha = linha + "<td>" + formatDate(object.DtFVig) + "</td>";
-                    linha = linha + "<td>" + object.CotasLib + "</td>";
-                    linha = linha + "<td>" + object.cotasuso + "</td>";
-                    linha = linha + "<td>" + object.saldo + "</td>";
+                        linha = linha + "<tr>";
 
-                    linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm' href='fincotacllib_alterar.php?fcccod=" + object.fcccod + "&Etbcod=" + object.Etbcod + "&DtIVig=" + object.DtIVig + "&id_recid=" + object.id_recid + "' role='button'><i class='bi bi-pencil-square'></i></a> ";
+                        linha = linha + "<td>" + object.Etbcod + "</td>";
+                        linha = linha + "<td>" + object.munic + "</td>";
+                        linha = linha + "<td>" + formatDate(object.DtIVig) + "</td>";
+                        linha = linha + "<td>" + formatDate(object.DtFVig) + "</td>";
+                        linha = linha + "<td>" + object.CotasLib + "</td>";
+                        linha = linha + "<td>" + object.cotasuso + "</td>";
+                        linha = linha + "<td>" + object.saldo + "</td>";
 
-                    linha = linha + "<button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#excluirFiliaisModal'";
-                    linha = linha + " data-Etbcod='" + object.Etbcod + "' ";
-                    linha = linha + " data-munic='" + object.munic + "' ";
-                    linha = linha + " data-id_recid='" + object.id_recid + "' ";
-                    linha = linha + "><i class='bi bi-trash'></i></button></td>";
+                        linha = linha + "<td class='text-end pe-2'><a class=' btn btn-warning btn-sm' href='fincotacllib_alterar.php?fcccod=" + object.fcccod + "&Etbcod=" + object.Etbcod + "&DtIVig=" + object.DtIVig + "&id_recid=" + object.id_recid + "' role='button'><i class='bi bi-pencil-square'></i></a> ";
 
-                    linha = linha + "</tr>";
+                        linha = linha + "<button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#excluirFiliaisModal'";
+                        linha = linha + " data-Etbcod='" + object.Etbcod + "' ";
+                        linha = linha + " data-munic='" + object.munic + "' ";
+                        linha = linha + " data-id_recid='" + object.id_recid + "' ";
+                        linha = linha + "><i class='bi bi-trash'></i></button></td>";
+
+                        linha = linha + "</tr>";
+                    }
+                    $("#dadosFiliais").html(linha);
                 }
-                $("#dadosFiliais").html(linha);
-            }
+            });
+        }
+
+        $("#filtrarEntrada").click(function() {
+            var ativos = $("#buscaAtivo").is(':checked') == true ? true : false
+            buscarFiliais($("#filtrarEtbcod").val(), ativos);
         });
 
         function buscaPlanos() {
@@ -596,15 +643,25 @@ $contrassin = "Nao";
             elemento.click()
         });
 
-        // Ao selecionar um estabelecimento, passa Etbcod e munic para form inserir 
+        // Lucas 24092024 - alterado evento de click, testa onde foi o click se foi no modal inserir ou no filtro da tabela 
         $(document).on('click', '.ts-click', function() {
-            var etbcod = $(this).attr("data-etbcod");
-            var munic = $(this).attr("data-munic");
 
-            $('#inserir_Etbcod').val(etbcod);
-            $('#inserir_munic').val(munic);
+            //alert(JSON.stringify($('#zoomEstabModal')[0]['uidEvent']));
+            if ($('#zoomEstabModal')[0]['uidEvent'] == 18) {
+                var etbcod = $(this).attr("data-etbcod");
 
-            $('#zoomEstabModal').modal('hide');
+                $('#filtrarEtbcod').val(etbcod);
+
+                $('#zoomEstabModal').modal('hide');
+            } else {
+                var etbcod = $(this).attr("data-etbcod");
+                var munic = $(this).attr("data-munic");
+
+                $('#inserir_Etbcod').val(etbcod);
+                $('#inserir_munic').val(munic);
+
+                $('#zoomEstabModal').modal('hide');
+            }
         });
 
         // AÇÂO DE CLICK MODAL PLANO
@@ -638,7 +695,6 @@ $contrassin = "Nao";
 
             $('#zoomSupervisorModal').modal('hide');
         });
-
 
         $("#alterarClusterForm").submit(function(event) {
             event.preventDefault();
@@ -782,6 +838,24 @@ $contrassin = "Nao";
             window.location.reload();
         }
 
+        // Ao iniciar o programa, inseri a data atual no input e chama funcao buscarFiliais
+        $(document).ready(function() {
+            var data = new Date(),
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(),
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            dataAtual = anoF + "-" + mesF + "-" + diaF;
+            primeirodiadomes = anoF + "-" + mesF + "-" + "01";
+
+            const DtIVig = document.getElementById("inserir_DtIVig");
+            DtIVig.value = dataAtual;
+
+            const DtIVig_Supervisor = document.getElementById("inserir_DtIVig_Supervisor");
+            DtIVig_Supervisor.value = dataAtual;
+
+        });
 
         function formatDate(dateString) {
             if (dateString !== null && !isNaN(new Date(dateString))) {
@@ -793,25 +867,6 @@ $contrassin = "Nao";
             }
             return "";
         }
-
-        // Ao iniciar o programa, inseri a data atual no input. 
-        $(document).ready(function() {
-            var data = new Date(),
-                dia = data.getDate().toString(),
-                diaF = (dia.length == 1) ? '0' + dia : dia,
-                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro come�a com zero.
-                mesF = (mes.length == 1) ? '0' + mes : mes,
-                anoF = data.getFullYear();
-            dataAtual = anoF + "-" + mesF + "-" + diaF;
-            primeirodiadomes = anoF + "-" + mesF + "-" + "01";
-
-            // offCanvas data
-            const DtIVig = document.getElementById("inserir_DtIVig");
-            DtIVig.value = dataAtual;
-
-            const DtIVig_Supervisor = document.getElementById("inserir_DtIVig_Supervisor");
-            DtIVig_Supervisor.value = dataAtual;
-        });
     </script>
 
 
