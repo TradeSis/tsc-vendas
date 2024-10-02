@@ -114,7 +114,7 @@ $contrassin = "Nao";
     </div>
 
     <!-- botão de modais que ficam escondidos -->
-    <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomEstabModal" id="abreEstabModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
+    <button type="button" class="btn btn-success d-none ts-acionaZoomEstab" data-bs-toggle="modal" data-bs-target="#zoomEstabModal" id="abreEstabModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
     <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomPlanosModal" id="abrePlanosModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
     <button type="button" class="btn btn-success d-none" data-bs-toggle="modal" data-bs-target="#zoomSupervisorModal" id="abreSupervisorModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
 
@@ -298,7 +298,7 @@ $contrassin = "Nao";
                 <div class="row">
                     <div class="col-2 d-flex">
                         <input type="text" class="form-control ts-inputcomBtn mt-1 border-end" name="Etbcod" id="filtrarEtbcod" placeholder="Buscar Filial">
-                        <button class="btn btn-outline-secondary filtrarZoomEstab" type="button" title="Pesquisar Filial"><i class="bi bi-search"></i></button>
+                        <button class="btn btn-outline-secondary filtrarZoomEstab ts-acionaZoomEstab" type="button" title="Pesquisar Filial"><i class="bi bi-search"></i></button>
                     </div>
                     <div class="col-4 d-flex">
                         <div class="gap-2 pt-2">
