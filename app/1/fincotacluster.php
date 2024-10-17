@@ -1,12 +1,12 @@
 <?php
-// lucas 22082024 - id 1241 passado programa para progress
+// lucas 14082024 criado
 //echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
     $LOG_NIVEL = defineNivelLog();
-    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "token";
+    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "fincotacluster";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
             $arquivo = fopen(defineCaminhoLog() . "vendas_" . date("dmY") . ".log", "a");
@@ -27,21 +27,22 @@ $dados = array();
 
 
 $progr = new chamaprogress();
-$retorno = $progr->executarprogress("vendas/app/1/token", json_encode($jsonEntrada));
+$retorno = $progr->executarprogress("vendas/app/1/fincotacluster", json_encode($jsonEntrada));
 fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
 $dados = json_decode($retorno,true);
   if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
       $dados = $dados["conteudoSaida"][0];
   } else {
     
-     if (!isset($dados["usuarios"][1]) && ($jsonEntrada['dadosEntrada'][0]['idToken'] != null)) {  // Verifica se tem mais de 1 registro
-      $dados = $dados["usuarios"][0]; // Retorno sem array
-     } 
+     if (!isset($dados["fincotacluster"][1]) && ($jsonEntrada['dadosEntrada'][0]['fcccod'] != null)) {  // Verifica se tem mais de 1 registro
+      $dados = $dados["fincotacluster"][0]; // Retorno sem array
+    } else {
+      $dados = $dados["fincotacluster"];  
+    }
 
   }
 
 
-//$jsonSaida = array("usuarios" => $dados);
 $jsonSaida = $dados;
 
 

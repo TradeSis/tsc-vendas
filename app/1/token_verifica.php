@@ -1,50 +1,70 @@
 <?php
-// gabriel 21072023
-$log_datahora_ini = date("dmYHis");
-$acao = "verificatoken";
-$arqlog = defineCaminhoLog() . "apilebes_" . $acao . "_" . date("dmY") . ".log";
-$arquivo = fopen($arqlog, "a");
-$identificacao = $log_datahora_ini . $acao;
-fwrite($arquivo, $identificacao . "-ENTRADA->" . json_encode($jsonEntrada) . "\n"); 
-require_once ROOT . "/vendor/autoload.php";
-$google2fa = new \PragmaRX\Google2FA\Google2FA();
-$conexao = conectaMysql();
-$usuarios = array();
+// lucas 22082024 - id 1241 passado programa para progress 
+//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
 
-if (!isset($jsonEntrada["token"][0]["idUsuario"]) || !isset($jsonEntrada["token"][0]["token"])) {
-  $jsonSaida = json_decode(json_encode(array("status" => 400, "retorno" => "Dados nao informados")), true);
-
-} else {
-  $idUsuario = $jsonEntrada["token"][0]["idUsuario"];
-  $sql = "SELECT * FROM token WHERE token.idUsuario = '" . $idUsuario . "'";
-  $buscar = mysqli_query($conexao, $sql);
-
-  if (mysqli_num_rows($buscar) === 0) {
-    $jsonSaida = json_decode(json_encode(array("status" => 401, "retorno" => "Usuario nao Cadastrado")), true);
-  } else {
-    $rows = 0; 
-    while ($row = mysqli_fetch_array($buscar, MYSQLI_ASSOC)) {
-      if ($row['secret'] !== null) {
-        $token = $jsonEntrada["token"][0]["token"];
-
-        if ($google2fa->verifyKey($row['secret'], $token)) {
-          $row['senhaCorreta'] = true;
-        } else {
-          $row['senhaCorreta'] = false;
-        }
-      }
-      unset($row['secret']);
-      array_push($usuarios, $row);
-      $rows++; 
+//LOG
+$LOG_CAMINHO = defineCaminhoLog();
+if (isset($LOG_CAMINHO)) {
+  $LOG_NIVEL = defineNivelLog();
+  $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "verificatoken";
+  if (isset($LOG_NIVEL)) {
+    if ($LOG_NIVEL >= 1) {
+      $arquivo = fopen(defineCaminhoLog() . "vendas_verificatoken" . date("dmY") . ".log", "a");
     }
-
-//    if (isset($jsonEntrada["token"][0]["idUsuario"]) && $rows == 1) {
-//      $usuarios = $usuarios[0];
-//    }
-
-    $jsonSaida = array("usuario" => $usuarios);
   }
 }
-fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n"); 
+if (isset($LOG_NIVEL)) {
+  if ($LOG_NIVEL == 1) {
+    fwrite($arquivo, $identificacao . "\n");
+  }
+  if ($LOG_NIVEL >= 2) {
+    fwrite($arquivo, $identificacao . "-ENTRADA->" . json_encode($jsonEntrada) . "\n");
+  }
+}
+//LOG
+require_once ROOT . "/vendor/autoload.php";
+$google2fa = new \PragmaRX\Google2FA\Google2FA();
+$dados = array();
+
+
+$progr = new chamaprogress();
+$retorno = $progr->executarprogress("vendas/app/1/token_verifica", json_encode($jsonEntrada));
+$dadosretorno = json_decode($retorno, true);
+$rowretorno['idToken'] = $dadosretorno["token"][0]["idToken"];
+$retornoFormat = array("token" => $rowretorno);
+fwrite($arquivo, $identificacao . "-RETORNO->" . json_encode($retornoFormat) . "\n");
+$usuarios = array();
+
+$dados = json_decode($retorno, true);
+if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
+  $jsonSaida = json_decode(json_encode(array("status" => 401, "retorno" => "Usuario nao Cadastrado")), true);
+} else {
+  $rows = 0;
+  $secret = $dados["token"][0]["secret"];
+  $dados = $dados["token"];
+  $token = $jsonEntrada['dadosEntrada'][0]["token"];
+  $row["idToken"] = $jsonEntrada['dadosEntrada'][0]["idToken"];
+
+  if ($google2fa->verifyKey($secret, $token)) {
+    $row['senhaCorreta'] = true;
+  } else {
+    $row['senhaCorreta'] = false;
+  }
+
+  array_push($usuarios, $row);
+  //fwrite($arquivo, $identificacao . "-RETORNO DADOS->" . $dados[1] . "\n");
+  $jsonSaida = array("usuarios" => $usuarios);
+  fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n\n");
+
+}
+
+
+//LOG
+if (isset($LOG_NIVEL)) {
+  if ($LOG_NIVEL >= 2) {
+    fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n\n");
+  }
+}
+//LOG
+
 fclose($arquivo);
-?>

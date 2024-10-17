@@ -1,5 +1,4 @@
 <?php
-// lucas 22082024 - id 1241 passado programa para progress
 // PROGRESS
 // ALTERAR E INSERIR
 
@@ -8,10 +7,10 @@
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
     $LOG_NIVEL = defineNivelLog();
-    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "token_ativar";
+    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "fincotacllib_inserir";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
-            $arquivo = fopen(defineCaminhoLog() . "vendas_" . date("dmY") . ".log", "a");
+            $arquivo = fopen(defineCaminhoLog() . "vendas_inserir_" . date("dmY") . ".log", "a");
         }
     }
 }
@@ -29,7 +28,7 @@ if (isset($LOG_NIVEL)) {
 try {
 
     $progr = new chamaprogress();
-    $retorno = $progr->executarprogress("vendas/app/1/token_ativar",json_encode($jsonEntrada));
+    $retorno = $progr->executarprogress("vendas/app/1/fincotacllib_inserir",json_encode($jsonEntrada));
     fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
     $conteudoSaida = json_decode($retorno,true);
     if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
@@ -48,6 +47,7 @@ catch (Exception $e) {
     // ACAO EM CASO DE ERRO (CATCH), que mesmo assim precise
 }
 //TRY-CATCH
+
 
 
 //LOG
