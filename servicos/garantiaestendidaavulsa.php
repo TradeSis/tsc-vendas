@@ -128,7 +128,7 @@ include_once(__DIR__ . '/../header.php');
             $.ajax({
                 type: 'POST',
                 dataType: 'html',
-                url: '../database/geaparam.php?operacao=buscar',
+                url: '../database/servicos/geaparam.php?operacao=buscar',
                 data: {},
                 success: function(msg) {
                    
@@ -177,7 +177,7 @@ include_once(__DIR__ . '/../header.php');
             event.preventDefault();
             var formData = new FormData(this);
             $.ajax({
-                url: "../database/geaparam.php?operacao=inserir",
+                url: "../database/servicos/geaparam.php?operacao=inserir",
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -197,7 +197,7 @@ include_once(__DIR__ . '/../header.php');
             event.preventDefault();
             var formData = new FormData(this);
             $.ajax({
-                url: "../database/geaparam.php?operacao=excluir",
+                url: "../database/servicos/geaparam.php?operacao=excluir",
                 type: 'POST',
                 data: formData,
                 processData: false,

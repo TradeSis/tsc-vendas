@@ -1,7 +1,7 @@
 <?php
 //Lucas 21102024 criado
 
-include_once __DIR__ . "/../conexao.php";
+include_once __DIR__ . "/../../conexao.php";
 
 function buscaGEAvulsa($procod = null)
 {

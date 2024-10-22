@@ -5,7 +5,7 @@
 
 
 include_once '../header.php';
-include_once '../database/seguros.php';
+include_once '../database/servicos/seguros.php';
 
 $recID = $_GET['recID'];
 

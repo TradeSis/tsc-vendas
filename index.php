@@ -89,8 +89,8 @@ if (
                         <?php }
                         if ($_SESSION['nivelMenu'] >= 2) { ?>
                             <li class="nav-item mr-1">
-                                <a class="nav-link <?php if ($tab == "seguros") {echo " active ";} ?>" 
-                                href="?tab=seguros" role="tab">Seguros</a>
+                                <a class="nav-link <?php if ($tab == "servicos") {echo " active ";} ?>" 
+                                href="?tab=servicos" role="tab">Serviços</a>
                             </li>
                         <?php }
                         if ($_SESSION['nivelMenu'] >= 4) { ?>
@@ -142,8 +142,8 @@ if (
                         <?php }
 
                         if ($_SESSION['nivelMenu'] >= 4) { ?>
-                        <option value="<?php echo URLROOT ?>/vendas/?tab=seguros" 
-                        <?php if ($getTab == "seguros") {echo " selected ";} ?>>Seguros</option>
+                        <option value="<?php echo URLROOT ?>/vendas/?tab=servicos" 
+                        <?php if ($getTab == "servicos") {echo " selected ";} ?>>Serviços</option>
                         <?php }
 
                         if ($_SESSION['nivelMenu'] >= 4) { ?>
@@ -182,8 +182,8 @@ if (
             if ($tab == "cupomcashback") {
                 $src = "consultas/cupomcashback_parametros.php";
             }
-            if ($tab == "seguros") {
-                $src = "seguros/";
+            if ($tab == "servicos") {
+                $src = "servicos/";
             }
             if ($tab == "apoio") {
                 $src = "apoio/";

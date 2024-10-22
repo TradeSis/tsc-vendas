@@ -6,10 +6,10 @@
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
     $LOG_NIVEL = defineNivelLog();
-    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "consultaplanosge";
+    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "geafinan";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
-            $arquivo = fopen(defineCaminhoLog() . "vendas_consultaplanosge_" . date("dmY") . ".log", "a");
+            $arquivo = fopen(defineCaminhoLog() . "vendas_" . date("dmY") . ".log", "a");
         }
     }
 }
@@ -23,32 +23,24 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-
-
-if(isset($parametro) && $parametro != ""){
-    $conteudoEntrada = json_encode(array(
-        "dadosEntrada" => array(array(
-                "procod" =>  $parametro
-            ))));
-}elseif(isset($jsonEntrada) && $jsonEntrada != ""){
-    $conteudoEntrada = json_encode($jsonEntrada);
-}else{
-    $conteudoEntrada = json_encode(array(
-        "dadosEntrada" => array(array(
-                "procod" =>  null
-            ))));
-}
-
 $dados = array();
 
+
 $progr = new chamaprogress();
-$retorno = $progr->executarprogress("vendas/app/1/consultaplanosge", $conteudoEntrada);
+$retorno = $progr->executarprogress("vendas/app/1/servicos/geafinan", json_encode($jsonEntrada));
 fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
 $dados = json_decode($retorno,true);
   if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
       $dados = $dados["conteudoSaida"][0];
   } else {
-    $dados = $dados["JSON"];
+
+    if (!isset($dados["geafinan"][0]) && ($jsonEntrada['dadosEntrada'][0]['procod'] != null)) {  // Verifica se tem mais de 1 registro
+        $dados = $dados["geafinan"][0]; // Retorno sem array
+      } elseif(isset($jsonEntrada['dadosEntrada'][0]['fincod'])){
+        $dados = $dados["geafinan"][0];
+      }else {
+        $dados = $dados["geafinan"];  
+      }
   }
 
 

@@ -4,7 +4,7 @@
 // gabriel 09022023 15:35
 
 include_once '../header.php';
-include_once '../database/seguros.php';
+include_once '../database/servicos/seguros.php';
 
 if (isset($_GET['parametros'])) {
     $nomeTipoSeguro = $_POST['nomeTipoSeguro'];

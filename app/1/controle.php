@@ -76,19 +76,19 @@ if ($metodo == "GET") {
       break;
 
     case "seguros":
-      include 'seguros.php';
+      include 'servicos/seguros.php';
     break;
 
     case "geaparam":
-      include 'geaparam.php';
+      include 'servicos/geaparam.php';
     break;
 
     case "geafinan":
-      include 'geafinan.php';
+      include 'servicos/geafinan.php';
     break;
 
     case "consultaplanosge":
-      include 'consultaplanosge.php';
+      include 'servicos/consultaplanosge.php';
     break;
       
     default:
@@ -149,11 +149,11 @@ if ($metodo == "PUT") {
       break;
 
     case "geaparam":
-      include 'geaparam_inserir.php';
+      include 'servicos/geaparam_inserir.php';
     break;
 
     case "geafinan":
-      include 'geafinan_inserir.php';
+      include 'servicos/geafinan_inserir.php';
     break;
 
     default:
@@ -250,17 +250,13 @@ if ($metodo == "DELETE") {
     case "supervisor":
       include 'supervisor_excluir.php';
       break;
-
+      
     case "geaparam":
-      include 'geaparam_excluir.php';
-    break;
-   
-    case "geaparam":
-      include 'geaparam_excluir.php';
+      include 'servicos/geaparam_excluir.php';
     break;
 
     case "geafinan":
-      include 'geafinan_excluir.php';
+      include 'servicos/geafinan_excluir.php';
     break;
 
     default:

@@ -36,7 +36,7 @@ $dados = array();
 
 
 $progr = new chamaprogress();
-$retorno = $progr->executarprogress("vendas/app/1/geaparam", $conteudoEntrada);
+$retorno = $progr->executarprogress("vendas/app/1/servicos/geaparam", $conteudoEntrada);
 fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
 $dados = json_decode($retorno,true);
   if (isset($dados["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro

@@ -7,10 +7,10 @@
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
     $LOG_NIVEL = defineNivelLog();
-    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "geafinan_excluir";
+    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "geafinan_inserir";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
-            $arquivo = fopen(defineCaminhoLog() . "vendas_excluir_" . date("dmY") . ".log", "a");
+            $arquivo = fopen(defineCaminhoLog() . "vendas_inserir_" . date("dmY") . ".log", "a");
         }
     }
 }
@@ -29,7 +29,7 @@ if (isset($LOG_NIVEL)) {
 try {
 
     $progr = new chamaprogress();
-    $retorno = $progr->executarprogress("vendas/app/1/geafinan_excluir",json_encode($jsonEntrada));
+    $retorno = $progr->executarprogress("vendas/app/1/servicos/geafinan_inserir",json_encode($jsonEntrada));
     fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
     $conteudoSaida = json_decode($retorno,true);
     if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro

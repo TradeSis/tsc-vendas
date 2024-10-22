@@ -1,7 +1,7 @@
 <?php
 // Lucas 21102024
 include_once('../header.php');
-include_once('../database/geaparam.php');
+include_once('../database/servicos/geaparam.php');
 
 $procod = buscaGEAvulsa($_GET['procod']);
 
@@ -156,7 +156,7 @@ $contrassin = "Nao";
         $.ajax({
             type: 'POST',
             dataType: 'html',
-            url: '../database/geafinan.php?operacao=buscar',
+            url: '../database/servicos/geafinan.php?operacao=buscar',
             beforeSend: function() {
                 $("#dadosPlanos").html("Carregando...");
             },
@@ -222,7 +222,7 @@ $contrassin = "Nao";
             event.preventDefault();
             var formData = new FormData(this);
             $.ajax({
-                url: "../database/geafinan.php?operacao=inserir",
+                url: "../database/servicos/geafinan.php?operacao=inserir",
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -242,7 +242,7 @@ $contrassin = "Nao";
             event.preventDefault();
             var formData = new FormData(this);
             $.ajax({
-                url: "../database/geafinan.php?operacao=excluir",
+                url: "../database/servicos/geafinan.php?operacao=excluir",
                 type: 'POST',
                 data: formData,
                 processData: false,
