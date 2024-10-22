@@ -87,6 +87,12 @@ if (
                                 href="?tab=cupomcashback" role="tab">Cupom Cashback</a>
                             </li>
                         <?php }
+                        if ($_SESSION['nivelMenu'] >= 2) { ?>
+                            <li class="nav-item mr-1">
+                                <a class="nav-link <?php if ($tab == "seguros") {echo " active ";} ?>" 
+                                href="?tab=seguros" role="tab">Seguros</a>
+                            </li>
+                        <?php }
                         if ($_SESSION['nivelMenu'] >= 4) { ?>
                             <li class="nav-item mr-1">
                                 <a class="nav-link <?php if ($tab == "apoio") {echo " active ";} ?>" 
@@ -136,9 +142,15 @@ if (
                         <?php }
 
                         if ($_SESSION['nivelMenu'] >= 4) { ?>
+                        <option value="<?php echo URLROOT ?>/vendas/?tab=seguros" 
+                        <?php if ($getTab == "seguros") {echo " selected ";} ?>>Seguros</option>
+                        <?php }
+
+                        if ($_SESSION['nivelMenu'] >= 4) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/?tab=apoio" 
                         <?php if ($getTab == "apoio") {echo " selected ";} ?>>Apoio</option>
                         <?php } ?>
+                        
 
                     </select>
                 </div>
@@ -169,6 +181,9 @@ if (
             }
             if ($tab == "cupomcashback") {
                 $src = "consultas/cupomcashback_parametros.php";
+            }
+            if ($tab == "seguros") {
+                $src = "seguros/";
             }
             if ($tab == "apoio") {
                 $src = "apoio/";

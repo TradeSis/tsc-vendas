@@ -74,6 +74,22 @@ if ($metodo == "GET") {
     case "filialsupervisor":
       include 'filialsupervisor.php';
       break;
+
+    case "seguros":
+      include 'seguros.php';
+    break;
+
+    case "geaparam":
+      include 'geaparam.php';
+    break;
+
+    case "geafinan":
+      include 'geafinan.php';
+    break;
+
+    case "consultaplanosge":
+      include 'consultaplanosge.php';
+    break;
       
     default:
       $jsonSaida = json_decode(
@@ -131,6 +147,14 @@ if ($metodo == "PUT") {
     case "fincotarel":
       include 'fincotarel.php';
       break;
+
+    case "geaparam":
+      include 'geaparam_inserir.php';
+    break;
+
+    case "geafinan":
+      include 'geafinan_inserir.php';
+    break;
 
     default:
       $jsonSaida = json_decode(
@@ -226,7 +250,18 @@ if ($metodo == "DELETE") {
     case "supervisor":
       include 'supervisor_excluir.php';
       break;
-  
+
+    case "geaparam":
+      include 'geaparam_excluir.php';
+    break;
+   
+    case "geaparam":
+      include 'geaparam_excluir.php';
+    break;
+
+    case "geafinan":
+      include 'geafinan_excluir.php';
+    break;
 
     default:
       $jsonSaida = json_decode(
